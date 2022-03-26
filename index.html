@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
 
     <title>Heat Pump Operating Cost Comparison</title>
   </head>
@@ -14,25 +15,36 @@
       <hr/>
       <form>
         <div class="mb-3">
-          <label for="price" class="form-label">Price</label>
-          <input type="text" class="form-control" id="price" aria-describedby="priceHelp"
-              onchange="calculateCOP()"
-          >
-          <div id="priceHelp" class="form-text">Enter price in dollars.</div>
-        </div>
-        <div class="mb-3">
-          <label for="unit" class="form-label">Unit</label>
-          <select id="unit" class="form-select" aria-label="" aria-describedby="unitHelp"
-              onchange="calculateCOP()">
-            <option selected></option>
-            <!-- <option value="1">&#13176;</option> <!-- m^3--> -->
-            <option value="m3">m3</option>
-            <option value="therm">Therm</option>
-            <option value="L">Litre</option>
+          <label for="existing" class="form-label">Current heating method</label>
+          <select aria-label="" class="form-select" id="existing" onchange="setExisting()">
+            <option value="" selected></option>
+            <option value="0">Natural Gas</option>
+            <option value="1">Propane</option>
+            <option value="2">Oil</option>
+            <option value="3">Electric Resistance</option>
           </select>
-          <div id="unitHelp" class="form-text">Enter price in dollars.</div>
         </div>
-        <div class="mb-3">
+        <div class="row mb-3" id="existingPrice">
+          <div class="col">
+            <label for="price" class="form-label">Price</label>
+            <input type="text" class="form-control" id="price" aria-describedby="priceHelp"
+                onchange="calculateCOP()"
+            >
+            <div id="priceHelp" class="form-text">Enter price in dollars.</div>
+          </div>
+          <div class="col">
+            <label for="unit" class="form-label">Unit</label>
+            <select id="unit" class="form-select" aria-label=""
+                onchange="calculateCOP()">
+              <option class="hidden" id="emptyOption" selected></option>
+              <!-- <option id="m3" value="m3">&#13176;</option> <!-- m^3--> -->
+              <option class="hidden" id="m3" value="m3">m3</option>
+              <option class="hidden" id="therm" value="therm">Therm</option>
+              <option class="hidden" id="L" value="L">Litre</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3" id="existingFurnace">
           <label for="efficiency" class="form-label">Furnace Efficiency (%)</label>
           <input type="text" class="form-control" id="efficiency" aria-describedby="efficiencyHelp"
               onchange="calculateCOP()">
