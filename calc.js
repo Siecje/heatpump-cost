@@ -39,6 +39,7 @@ const kWhPerUnit = {
   "therm": 29.307107,
   // Propane
   "L": 7.08,
+  "kWh": 1,
 }
 
 
@@ -125,19 +126,31 @@ function calculateCOP(){
   let efficiency = Number(document.getElementById("efficiency").value);
   let electricity_price = Number(document.getElementById("electricity_price").value);
 
-  if (!price || !unit || !efficiency || !electricity_price){
-    return;
+  let efficiencyAsDecimal;
+  let eqCOP;
+  let realkWhPerUnit;
+  let costPerkWhHeat;
+  let existing = document.getElementById("existing").value;
+  if (existing === "3"){
+    eqCOP = 1;
+    unit = "kWh";
+    efficiencyAsDecimal = 1;
+    price = electricity_price;
   }
+  else if (price && unit && efficiency){
+    efficiencyAsDecimal = efficiency * 0.01;
+    eqCOP = electricity_price / costPerkWhHeat;
+  }
+  realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
+  costPerkWhHeat = price / realkWhPerUnit;
 
-  let efficiencyAsDecimal = efficiency * 0.01;
-  let realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
-  let costPerkWhHeat = price / realkWhPerUnit;
-
-  let eqCOP = electricity_price / costPerkWhHeat;
   document.getElementById("cop").innerText = eqCOP.toFixed(2);
 
   let heatPumpSpec = document.getElementById("heatPump").value;
   let heatPumpSpecUnit = document.getElementById("heatPumpUnit").value;
+  if(!heatPumpSpecUnit){
+    return;
+  }
   let hpCOP = heatPumpSpec;
   if (heatPumpSpecUnit === "HSPF"){
     hpCOP = hpCOP / 3.41;
@@ -158,11 +171,14 @@ function calculateCOP(){
 
   let energyPerHour = document.getElementById("heatLoss").value;
   let energyPerHourUnit = document.getElementById("heatLossUnit").value;
+  if (!energyPerHour || !energyPerHourUnit){
+    return;
+  }
   if (energyPerHourUnit === "BTUh"){
     energyPerHour = energyPerHour / 3412;
   }
   let otherCostPerHour = (energyPerHour / realkWhPerUnit) * costPerkWhHeat;
-  let hpCostPerHour = energyPerHour * electricity_price;
+  let hpCostPerHour = (energyPerHour / ratio) * electricity_price;
   let hourlyDifference;
   if(otherCostPerHour > hpCostPerHour){
     hourlyDifference = otherCostPerHour - hpCostPerHour;
@@ -170,8 +186,15 @@ function calculateCOP(){
   else {
     hourlyDifference = hpCostPerHour - otherCostPerHour;
   }
+  document.getElementById("hourlyDifference").innerText = hourlyDifference.toFixed(2);
   let monthlyDifference = hourlyDifference * 24 * 30;
+  document.getElementById("monthlyDifference").innerText = monthlyDifference.toFixed(0);
+
   let city = document.getElementById("city").value;
+  if(!city){
+    console.log("no city");
+    return;
+  }
   let temperatureData = getTemperatureData(city);
   let numMonthsOfHeat = getNumberOfHeatingMonths(temperatureData);
 
@@ -180,8 +203,7 @@ function calculateCOP(){
     yearlyDifference = hourlyDifference * 24 * 30 * numMonthsOfHeat;
   }
   
-  document.getElementById("hourlyDifference").innerText = hourlyDifference.toFixed(2);
-  document.getElementById("monthlyDifference").innerText = monthlyDifference.toFixed(0);
+  console.log(numMonthsOfHeat);
   document.getElementById("numHeatingMonths").innerText = numMonthsOfHeat;
   document.getElementById("yearlyDifference").innerText = yearlyDifference.toFixed(0);
 

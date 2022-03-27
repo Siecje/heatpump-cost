@@ -27,7 +27,7 @@
         </div>
         <div class="row mb-3" id="existingPrice">
           <div class="col">
-            <label for="price" class="form-label">Price</label>
+            <label for="price" class="form-label">Price per unit of fuel</label>
             <input type="text" class="form-control" id="price" aria-describedby="priceHelp"
                 onchange="calculateCOP()"
             >
@@ -97,16 +97,16 @@
         </div>
         <div class="row">
           <p>Hourly Savings: $<span id="hourlyDifference"></span></p>
+          <p>Monthly Savings: $<span id="monthlyDifference"></span></p>
         </div>
         <div class="row">
           <label for="city" class="form-label">City</label>
-          <input class="form-control" list="cityOptions" id="city" placeholder="Type to search city...">
+          <input class="form-control" list="cityOptions" id="city" placeholder="Type to search city..." onchange="calculateCOP()">
           <datalist id="cityOptions">
           </datalist>
         </div>
         <div class="form-text">Temperature data is from https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities</div>
         <div class="row">
-          <p>Monthly Savings: $<span id="monthlyDifference"></span></p>
           <p>Number of Heating Months: <span id="numHeatingMonths"></span></p>
           <p>Yearly Savings: $<span id="yearlyDifference"></span></p>
         </div>
