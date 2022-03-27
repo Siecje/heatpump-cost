@@ -136,13 +136,18 @@ function calculateCOP(){
     unit = "kWh";
     efficiencyAsDecimal = 1;
     price = electricity_price;
+    realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
+    costPerkWhHeat = price / realkWhPerUnit;
   }
   else if (price && unit && efficiency){
     efficiencyAsDecimal = efficiency * 0.01;
+    realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
+    costPerkWhHeat = price / realkWhPerUnit;
     eqCOP = electricity_price / costPerkWhHeat;
   }
-  realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
-  costPerkWhHeat = price / realkWhPerUnit;
+  else {
+    return;
+  }
 
   document.getElementById("cop").innerText = eqCOP.toFixed(2);
 
@@ -158,6 +163,8 @@ function calculateCOP(){
   
   let ratio = hpCOP / eqCOP;
   let text = "";
+  console.log(hpCOP);
+  console.log(eqCOP);
   if(hpCOP > eqCOP){
     text = ratio.toFixed(2) + " times LESS."
   }
