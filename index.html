@@ -7,15 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="styles.css" rel="stylesheet">
 
-    <title>Heat Pump Operating Cost Comparison</title>
+    <title>Heat Pump Cost Comparison</title>
   </head>
   <body>
     <div class="container">
-      <h1>Heat Pump Operating Cost Comparison</h1>
+      <h1>Heat Pump Cost Comparison</h1>
       <hr/>
+      <h2>Is using a heat pump cheaper than other sources of heat?</h2>
       <form>
         <div class="mb-3">
-          <label for="existing" class="form-label">Current heating method</label>
+          <label for="existing" class="form-label">Heating Method</label>
           <select aria-label="" class="form-select" id="existing" onchange="setExisting()">
             <option value="" selected></option>
             <option value="0">Natural Gas</option>
@@ -50,6 +51,7 @@
               onchange="calculateCOP()">
           <div id="efficiencyHelp" class="form-text">For example 95%</div>
         </div>
+        <hr>
         <div class="mb-3">
           <label for="electricity_price" class="form-label">Electricity Price</label>
           <input type="text" class="form-control" id="electricity_price" aria-describedby="electricity_priceHelp"
@@ -58,9 +60,9 @@
         </div>
         <div class="row">
           <div class="col">
-            <label for="heatPump" class="form-label">Heat Pump Specification</label>
+            <label for="heatPump" class="form-label">Heat Pump Performance</label>
             <input type="text" class="form-control" id="heatPump" aria-describedby="heatPumpHelp" onchange="calculateCOP()">
-            <div id="heatPumpHelp" class="form-text">Heat .</div>
+            <div id="heatPumpHelp" class="form-text">Heat pump specification used to calculate heat output.</div>
           </div>
           <div class="col">
             <label for="heatPumpUnit" class="form-label">Unit</label>
@@ -76,6 +78,7 @@
           <p>The heat pump is cheaper as long as the COP is larger than <span id="cop"></span>.</p>
           <p>Check at which temperature the heat pump has a larger COP.</p>
         </div>
+        <h2>But that's per unit of heat, how much heat do I need? How much will I actually save?</h2>
         <div class="row">
           <div class="col">
             <label for="heatLoss" class="form-label">Heat Loss</label>
@@ -94,23 +97,32 @@
         </div>
         <div class="row">
           <p>Hourly Savings: $<span id="hourlyDifference"></span></p>
-          <p>Monthly Savings: $<span id="monthlyDifference"></span></p>
-          <p>Yearly Savings: $<span id="yearlyDifference"></span></p>
         </div>
         <div class="row">
-          <label for="heatPumpCost" class="form-label">Heat Pump Cost</label>
-          <input type="text" class="form-control" id="heatPumpCost" aria-describedby="heatPumpCostHelp" onchange="calculateCOP()">
-          <div id="heatPumpCostHelp" class="form-text">Cost to install heat pump or additional costs compare to other method.</div>
-        </div>
-        <div class="row">
-          <p>After <span id="breakEvenYear"></span> years the cost of the heat pump will break even.</p>
-        </div>
-        <!-- <div class="row">
           <label for="city" class="form-label">City</label>
           <input class="form-control" list="cityOptions" id="city" placeholder="Type to search city...">
           <datalist id="cityOptions">
           </datalist>
-        </div> -->
+        </div>
+        <div class="form-text">Temperature data is from https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities</div>
+        <div class="row">
+          <p>Monthly Savings: $<span id="monthlyDifference"></span></p>
+          <p>Number of Heating Months: <span id="numHeatingMonths"></span></p>
+          <p>Yearly Savings: $<span id="yearlyDifference"></span></p>
+        </div>
+        <div class="row">
+          <label for="heatPumpCost" class="form-label">Heat Pump Installation Cost</label>
+          <input type="text" class="form-control" id="heatPumpCost" aria-describedby="heatPumpCostHelp" onchange="calculateCOP()">
+          <div id="heatPumpCostHelp" class="form-text">Cost to install heat pump.</div>
+        </div>
+        <div class="row">
+          <label for="otherCost" class="form-label">Other Heating Installation Cost</label>
+          <input type="text" class="form-control" id="otherCost" aria-describedby="otherCostHelp" onchange="calculateCOP()">
+          <div id="otherCostHelp" class="form-text">Cost to install other heating source (ex. furnance).</div>
+        </div>
+        <div class="row">
+          <p>After <span id="breakEvenYear"></span> years the cost of the heat pump will break even. After that you are saving money.</p>
+        </div>
       </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -118,6 +130,3 @@
     <script src="calc.js"></script>
   </body>
 </html>
-
-<!-- https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities -->
-<!-- https://en.wikipedia.org/wiki/Heating_seasonal_performance_factor -->

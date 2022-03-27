@@ -8,7 +8,7 @@ function preFillForm(){
   document.getElementById("electricity_price").value = "0.12";
   document.getElementById("heatLoss").value = "22515";
   document.getElementById("heatLossUnit").value = "BTUh";
-  // document.getElementById("city").value = "Ottawa";
+  document.getElementById("city").value = "Ottawa";
   document.getElementById("heatPump").value = "9";
   document.getElementById("heatPumpUnit").value = "HSPF";
   document.getElementById("heatPumpCost").value = "20000";
@@ -27,7 +27,7 @@ function addCitySuggestions(){
 
 
 function onLoad(){
-  // addCitySuggestions();
+  addCitySuggestions();
   // preFillForm();
 }
 document.addEventListener('DOMContentLoaded', onLoad, false);
@@ -90,6 +90,35 @@ function setExisting(){
 }
 
 
+function getTemperatureData(city){
+  for (const cityData of temperatureDataSet){
+    if (cityData[1] === city){
+      return cityData;
+    }
+  }
+}
+
+
+function getNumberOfHeatingMonths(temperatureData){
+  let count = 0;
+  // The first two items are country and city
+  const startIndex = 2;
+  // We don't care about the last two elements
+  const endIndex = temperatureData.length - 2;
+
+  // Temperature to stop heating
+  // I'd like to use 15 but with montly averages
+  // This gives a better estimate.
+  let stopHeatingTemp = 10;
+  for(let i=startIndex;i<endIndex;i++){
+    if (temperatureData[i] <= stopHeatingTemp){
+      count += 1;
+    }
+  }
+  return count;
+}
+
+
 function calculateCOP(){
   let price = Number(document.getElementById("price").value);
   let unit = document.getElementById("unit").value;
@@ -142,12 +171,26 @@ function calculateCOP(){
     hourlyDifference = hpCostPerHour - otherCostPerHour;
   }
   let monthlyDifference = hourlyDifference * 24 * 30;
-  let yearlyDifference = hourlyDifference * 24 * 365;
+  let city = document.getElementById("city").value;
+  let temperatureData = getTemperatureData(city);
+  let numMonthsOfHeat = getNumberOfHeatingMonths(temperatureData);
+
+  let yearlyDifference = 0;
+  if (numMonthsOfHeat > 0){
+    yearlyDifference = hourlyDifference * 24 * 30 * numMonthsOfHeat;
+  }
+  
   document.getElementById("hourlyDifference").innerText = hourlyDifference.toFixed(2);
   document.getElementById("monthlyDifference").innerText = monthlyDifference.toFixed(0);
+  document.getElementById("numHeatingMonths").innerText = numMonthsOfHeat;
   document.getElementById("yearlyDifference").innerText = yearlyDifference.toFixed(0);
 
   let heatPumpCost = document.getElementById("heatPumpCost").value;
+  let otherCost = Number(document.getElementById("otherCost").value);
+  if (Number.isInteger(otherCost)){
+    heatPumpCost -= otherCost;
+  }
+  
   let breakEvenYear = heatPumpCost / yearlyDifference;
   document.getElementById("breakEvenYear").innerText = breakEvenYear.toFixed(2);
 }
