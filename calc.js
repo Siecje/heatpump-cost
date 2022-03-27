@@ -163,8 +163,6 @@ function calculateCOP(){
   
   let ratio = hpCOP / eqCOP;
   let text = "";
-  console.log(hpCOP);
-  console.log(eqCOP);
   if(hpCOP > eqCOP){
     text = ratio.toFixed(2) + " times LESS."
   }
@@ -199,7 +197,6 @@ function calculateCOP(){
 
   let city = document.getElementById("city").value;
   if(!city){
-    console.log("no city");
     return;
   }
   let temperatureData = getTemperatureData(city);
@@ -210,7 +207,6 @@ function calculateCOP(){
     yearlyDifference = hourlyDifference * 24 * 30 * numMonthsOfHeat;
   }
   
-  console.log(numMonthsOfHeat);
   document.getElementById("numHeatingMonths").innerText = numMonthsOfHeat;
   document.getElementById("yearlyDifference").innerText = yearlyDifference.toFixed(0);
 
