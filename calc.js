@@ -1,5 +1,37 @@
 "use strict";
 
+function preFillForm(){
+  document.getElementById("existing").value = "1";
+  document.getElementById("price").value = "0.79";
+  document.getElementById("unit").value = "L";
+  document.getElementById("efficiency").value = "95";
+  document.getElementById("electricity_price").value = "0.12";
+  document.getElementById("heatLoss").value = "22515";
+  document.getElementById("heatLossUnit").value = "BTUh";
+  // document.getElementById("city").value = "Ottawa";
+  document.getElementById("heatPump").value = "9";
+  document.getElementById("heatPumpUnit").value = "HSPF";
+  document.getElementById("heatPumpCost").value = "20000";
+  calculateCOP();
+}
+
+
+function addCitySuggestions(){
+  let datalist = document.getElementById("cityOptions");
+  for (const cityData of temperatureDataSet){
+    let option = document.createElement("option");
+    option.setAttribute("value", cityData[1]);
+    datalist.appendChild(option);
+  }
+}
+
+
+function onLoad(){
+  // addCitySuggestions();
+  // preFillForm();
+}
+document.addEventListener('DOMContentLoaded', onLoad, false);
+
 
 const kWhPerUnit = {
   // Natural Gas
@@ -72,7 +104,50 @@ function calculateCOP(){
   let realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
   let costPerkWhHeat = price / realkWhPerUnit;
 
-  let cop = electricity_price / costPerkWhHeat;
+  let eqCOP = electricity_price / costPerkWhHeat;
+  document.getElementById("cop").innerText = eqCOP.toFixed(2);
 
-  document.getElementById("cop").innerText = cop.toFixed(2);
+  let heatPumpSpec = document.getElementById("heatPump").value;
+  let heatPumpSpecUnit = document.getElementById("heatPumpUnit").value;
+  let hpCOP = heatPumpSpec;
+  if (heatPumpSpecUnit === "HSPF"){
+    hpCOP = hpCOP / 3.41;
+  }
+  
+  let ratio = hpCOP / eqCOP;
+  let text = "";
+  if(hpCOP > eqCOP){
+    text = ratio.toFixed(2) + " times LESS."
+  }
+  else if(hpCOP < eqCOP){
+    text = ratio.toFixed(2) + " times MORE."
+  }
+  else {
+    text = " the same."
+  }
+  document.getElementById("costMultiplier").innerText = text;
+
+  let energyPerHour = document.getElementById("heatLoss").value;
+  let energyPerHourUnit = document.getElementById("heatLossUnit").value;
+  if (energyPerHourUnit === "BTUh"){
+    energyPerHour = energyPerHour / 3412;
+  }
+  let otherCostPerHour = (energyPerHour / realkWhPerUnit) * costPerkWhHeat;
+  let hpCostPerHour = energyPerHour * electricity_price;
+  let hourlyDifference;
+  if(otherCostPerHour > hpCostPerHour){
+    hourlyDifference = otherCostPerHour - hpCostPerHour;
+  }
+  else {
+    hourlyDifference = hpCostPerHour - otherCostPerHour;
+  }
+  let monthlyDifference = hourlyDifference * 24 * 30;
+  let yearlyDifference = hourlyDifference * 24 * 365;
+  document.getElementById("hourlyDifference").innerText = hourlyDifference.toFixed(2);
+  document.getElementById("monthlyDifference").innerText = monthlyDifference.toFixed(0);
+  document.getElementById("yearlyDifference").innerText = yearlyDifference.toFixed(0);
+
+  let heatPumpCost = document.getElementById("heatPumpCost").value;
+  let breakEvenYear = heatPumpCost / yearlyDifference;
+  document.getElementById("breakEvenYear").innerText = breakEvenYear.toFixed(2);
 }

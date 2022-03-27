@@ -56,11 +56,68 @@
               onchange="calculateCOP()">
           <div id="electricity_priceHelp" class="form-text">Enter price in dollars. Ex. $0.10 per kWh</div>
         </div>
+        <div class="row">
+          <div class="col">
+            <label for="heatPump" class="form-label">Heat Pump Specification</label>
+            <input type="text" class="form-control" id="heatPump" aria-describedby="heatPumpHelp" onchange="calculateCOP()">
+            <div id="heatPumpHelp" class="form-text">Heat .</div>
+          </div>
+          <div class="col">
+            <label for="heatPumpUnit" class="form-label">Unit</label>
+            <select id="heatPumpUnit" class="form-select" aria-label="" onchange="calculateCOP()">
+              <option selected></option>
+              <option value="COP">COP</option>
+              <option value="HSPF">HSPF</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <p>Heat from the heat pump will cost <span id="costMultiplier"></span></p>
+          <p>The heat pump is cheaper as long as the COP is larger than <span id="cop"></span>.</p>
+          <p>Check at which temperature the heat pump has a larger COP.</p>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="heatLoss" class="form-label">Heat Loss</label>
+            <input type="text" class="form-control" id="heatLoss" aria-describedby="heatLossHelp"
+                onchange="calculateCOP()">
+            <div id="heatLossHelp" class="form-text">The amount of heat the building losses every hour, also the amount of heat that needs to be produced every hour.</div>
+          </div>
+          <div class="col">
+            <label for="heatLossUnit" class="form-label">Unit</label>
+            <select id="heatLossUnit" class="form-select" aria-label="" onchange="calculateCOP()">
+              <option selected></option>
+              <option value="kWh">kWh</option>
+              <option value="BTUh">BTUh</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <p>Hourly Savings: $<span id="hourlyDifference"></span></p>
+          <p>Monthly Savings: $<span id="monthlyDifference"></span></p>
+          <p>Yearly Savings: $<span id="yearlyDifference"></span></p>
+        </div>
+        <div class="row">
+          <label for="heatPumpCost" class="form-label">Heat Pump Cost</label>
+          <input type="text" class="form-control" id="heatPumpCost" aria-describedby="heatPumpCostHelp" onchange="calculateCOP()">
+          <div id="heatPumpCostHelp" class="form-text">Cost to install heat pump or additional costs compare to other method.</div>
+        </div>
+        <div class="row">
+          <p>After <span id="breakEvenYear"></span> years the cost of the heat pump will break even.</p>
+        </div>
+        <!-- <div class="row">
+          <label for="city" class="form-label">City</label>
+          <input class="form-control" list="cityOptions" id="city" placeholder="Type to search city...">
+          <datalist id="cityOptions">
+          </datalist>
+        </div> -->
       </form>
-
-      <p>COP to beat <span id="cop"></span></p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="temperatureDataSet.js"></script>
     <script src="calc.js"></script>
   </body>
 </html>
+
+<!-- https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities -->
+<!-- https://en.wikipedia.org/wiki/Heating_seasonal_performance_factor -->
