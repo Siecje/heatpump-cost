@@ -39,6 +39,10 @@ const kWhPerUnit = {
   "therm": 29.307107,
   // Propane
   "L": 7.08,
+  // Oil
+  "gal": 40.6460267,
+  "oil_L": 10.35,
+  // Electric Resistance
   "kWh": 1,
 }
 
@@ -74,6 +78,10 @@ function setExisting(){
   else if (existingHeat === "1" || existingHeat === "2"){
     let litre = document.getElementById("L");
     litre.style.display = "block";
+    if (existingHeat === "2"){
+      let gal = document.getElementById("gal");
+      gal.style.display = "block";
+    }
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -140,6 +148,9 @@ function calculateCOP(){
     costPerkWhHeat = price / realkWhPerUnit;
   }
   else if (price && unit && efficiency){
+    if (unit == "L" && existing === "2"){
+      unit = "oil_L";
+    }
     efficiencyAsDecimal = efficiency * 0.01;
     realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
     costPerkWhHeat = price / realkWhPerUnit;
