@@ -106,7 +106,80 @@
           <datalist id="cityOptions">
           </datalist>
         </div>
-        <div class="form-text">Temperature data is from https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities</div>
+        <div class="row">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Average Temperature</th>
+                <th scope="col">Heating?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>January</td>
+                <td id="m_0"></td>
+                <td id="mh_0"></td>
+              </tr>
+              <tr>
+                <td>February</td>
+                <td id="m_1"></td>
+                <td id="mh_1"></td>
+              </tr>
+              <tr>
+                <td>March</td>
+                <td id="m_2"></td>
+                <td id="mh_2"></td>
+              </tr>
+              <tr>
+                <td>April</td>
+                <td id="m_3"></td>
+                <td id="mh_3"></td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td id="m_4"></td>
+                <td id="mh_4"></td>
+              </tr>
+              <tr>
+                <td>June</td>
+                <td id="m_5"></td>
+                <td id="mh_5"></td>
+              </tr>
+              <tr>
+                <td>July</td>
+                <td id="m_6"></td>
+                <td id="mh_6"></td>
+              </tr>
+              <tr>
+                <td>August</td>
+                <td id="m_7"></td>
+                <td id="mh_7"></td>
+              </tr>
+              <tr>
+                <td>September</td>
+                <td id="m_8"></td>
+                <td id="mh_8"></td>
+              </tr>
+              <tr>
+                <td>October</td>
+                <td id="m_9"></td>
+                <td id="mh_9"></td>
+              </tr>
+              <tr>
+                <td>November</td>
+                <td id="m_10"></td>
+                <td id="mh_10"></td>
+              </tr>
+              <tr>
+                <td>December</td>
+                <td id="m_11"></td>
+                <td id="mh_11"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="form-text">Temperature data is from https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities</div>
+        </div>
         <div class="row">
           <p>Number of Heating Months: <span id="numHeatingMonths"></span></p>
           <p>Yearly Savings: $<span id="yearlyDifference"></span></p>
@@ -122,7 +195,7 @@
           <div id="otherCostHelp" class="form-text">Cost to install other heating source (ex. furnance).</div>
         </div>
         <div class="row">
-          <p>After <span id="breakEvenYear"></span> years the cost of the heat pump will break even. After that you are saving money.</p>
+          <p>After <span id="breakEvenYear"></span> years the cost of the heat pump will break even, after that you are saving money. Will the heat pump last that long?</p>
         </div>
       </form>
     </div>

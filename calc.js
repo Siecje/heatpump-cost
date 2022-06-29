@@ -116,12 +116,18 @@ function getNumberOfHeatingMonths(temperatureData){
   const endIndex = temperatureData.length - 2;
 
   // Temperature to stop heating
-  // I'd like to use 15 but with montly averages
-  // This gives a better estimate.
-  let stopHeatingTemp = 10;
+  let stopHeatingTemp = 15;
+  let partialHeatingTemp = 10;
   for(let i=startIndex;i<endIndex;i++){
-    if (temperatureData[i] <= stopHeatingTemp){
+    // Populate table
+    document.getElementById("m_" + (i - startIndex)).innerText = temperatureData[i];
+    if (temperatureData[i] <= partialHeatingTemp){
       count += 1;
+      document.getElementById("mh_" + (i - startIndex)).innerText = "*";
+    }
+    else if (temperatureData[i] <= stopHeatingTemp){
+      count += 0.5;
+      document.getElementById("mh_" + (i - startIndex)).innerText = "*";
     }
   }
   return count;
