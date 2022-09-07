@@ -185,7 +185,7 @@ function calculateCOP(){
     text = ratio.toFixed(2) + " times LESS."
   }
   else if(hpCOP < eqCOP){
-    text = ratio.toFixed(2) + " times MORE."
+    text = (1 - ratio).toFixed(2) + " times MORE."
   }
   else {
     text = " the same."
