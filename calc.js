@@ -142,12 +142,12 @@ function calculateCOP(){
   let electricity_price = Number(document.getElementById("electricity_price").value);
 
   let efficiencyAsDecimal;
-  let eqCOP;
+  let equivalentCOP;
   let realkWhPerUnit;
   let costPerkWhHeat;
   let existing = document.getElementById("existing").value;
   if (existing === "3"){ // Electric Resistance
-    eqCOP = 1;
+    equivalentCOP = 1;
     unit = "kWh";
     efficiencyAsDecimal = 1;
     price = electricity_price;
@@ -161,13 +161,13 @@ function calculateCOP(){
     efficiencyAsDecimal = efficiency * 0.01;
     realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
     costPerkWhHeat = price / realkWhPerUnit;
-    eqCOP = electricity_price / costPerkWhHeat;
+    equivalentCOP = electricity_price / costPerkWhHeat;
   }
   else {
     return;
   }
 
-  document.getElementById("cop").innerText = eqCOP.toFixed(2);
+  document.getElementById("cop").innerText = equivalentCOP.toFixed(2);
 
   let heatPumpSpec = document.getElementById("heatPump").value;
   let heatPumpSpecUnit = document.getElementById("heatPumpUnit").value;
@@ -179,13 +179,13 @@ function calculateCOP(){
     hpCOP = hpCOP / 3.41;
   }
   
-  let ratio = hpCOP / eqCOP;
+  let ratio = equivalentCOP / hpCOP;
   let text = "";
-  if(hpCOP > eqCOP){
-    text = ratio.toFixed(2) + " times LESS."
+  if(hpCOP > equivalentCOP){
+    text = ((1 - ratio) * 100).toFixed(0) + "% LESS."
   }
-  else if(hpCOP < eqCOP){
-    text = (1 - ratio).toFixed(2) + " times MORE."
+  else if(hpCOP < equivalentCOP){
+    text = ((ratio - 1) * 100).toFixed(0) + "% MORE."
   }
   else {
     text = " the same."
