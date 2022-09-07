@@ -33,16 +33,19 @@ function onLoad(){
 }
 document.addEventListener('DOMContentLoaded', onLoad, false);
 
-
+// Sources
+// https://www.eia.gov/energyexplained/units-and-calculators/
 const kWhPerUnit = {
   // Natural Gas
   "m3": 10.55,
+  "ft3": 0.3045008,
   "therm": 29.307107,
   // Propane
   "L": 7.08,
+  "gal": 26.801936,
   // Oil
-  "gal": 40.6460267,
   "oil_L": 10.35,
+  "oil_gal": 40.6460267,
   // Electric Resistance
   "kWh": 1,
 }
@@ -59,8 +62,10 @@ function setExisting(){
   let existingHeat = document.getElementById("existing").value;
   let unitSelect = document.getElementById("unit");
 
+  unitSelect.value = "";
+
   hideAllChildren(unitSelect);
-  if (existingHeat === "0"){
+  if (existingHeat === "0"){ // Natural Gas
     let emptyOption = document.getElementById("emptyOption");
     emptyOption.style.display = "block";
 
@@ -69,6 +74,9 @@ function setExisting(){
 
     let therm = document.getElementById("therm");
     therm.style.display = "block";
+
+    let ft3 = document.getElementById("ft3");
+    ft3.style.display = "block";
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -79,10 +87,8 @@ function setExisting(){
   else if (existingHeat === "1" || existingHeat === "2"){
     let litre = document.getElementById("L");
     litre.style.display = "block";
-    if (existingHeat === "2"){
-      let gal = document.getElementById("gal");
-      gal.style.display = "block";
-    }
+    let gal = document.getElementById("gal");
+    gal.style.display = "block";
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -157,6 +163,9 @@ function calculateCOP(){
   else if (price && unit && efficiency){
     if (unit == "L" && existing === "2"){
       unit = "oil_L";
+    }
+    else if(unit == "gal" && existing == "2"){
+      unit = "oil_gal";
     }
     efficiencyAsDecimal = efficiency * 0.01;
     realkWhPerUnit = kWhPerUnit[unit] * efficiencyAsDecimal;
