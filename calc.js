@@ -57,6 +57,11 @@ function hideAllChildren(element){
   }
 }
 
+function displayIds(ids){
+  for (const id of ids){
+    document.getElementById(id).style.display = "block";
+  }
+}
 
 function setExisting(){
   let existingHeat = document.getElementById("existing").value;
@@ -69,14 +74,7 @@ function setExisting(){
     let emptyOption = document.getElementById("emptyOption");
     emptyOption.style.display = "block";
 
-    let m3 = document.getElementById("m3");
-    m3.style.display = "block";
-
-    let therm = document.getElementById("therm");
-    therm.style.display = "block";
-
-    let ft3 = document.getElementById("ft3");
-    ft3.style.display = "block";
+    displayIds(["m3", "therm", "ft3"]);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -85,10 +83,7 @@ function setExisting(){
     existingFurnace.style.display = "block";
   }
   else if (existingHeat === "1" || existingHeat === "2"){
-    let litre = document.getElementById("L");
-    litre.style.display = "block";
-    let gal = document.getElementById("gal");
-    gal.style.display = "block";
+    displayIds(["L", "gal"]);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
