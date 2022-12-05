@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
+
+    <title>Will New Windows Save Money?</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Will New Windows Save Money?</h1>
+      <hr/>
+      <form>
+        <div class="mb-3">
+          <label for="heating" class="form-label">Heating Method</label>
+          <select aria-label="" class="form-select" id="heating" onchange="setHeating()">
+            <option value="" selected></option>
+            <option value="4">Electric Heatpump</option>
+            <option value="3">Electric Resistance</option>
+            <option value="0">Natural Gas</option>
+            <option value="2">Oil</option>
+            <option value="1">Propane</option>
+          </select>
+        </div>
+        <div class="row mb-3" id="heatingPrice">
+          <div class="col">
+            <label for="priceEnergy" class="form-label">Energy Cost</label>
+            <input type="text" class="form-control" id="priceEnergy" aria-describedby="priceEnergyHelp"
+                onchange="calculate()"
+            >
+            <div id="priceEnergyHelp" class="form-text">Enter price in dollars.</div>
+          </div>
+          <div class="col">
+            <label for="priceEnergyUnit" class="form-label">Unit</label>
+            <select id="priceEnergyUnit" class="form-select" aria-label=""
+                onchange="calculate()">
+              <option class="hidden" id="emptyOption" selected></option>
+              <option class="hidden" id="m3" value="m3">Cubic Meter (m&sup3;)</option>
+              <option class="hidden" id="therm" value="therm">Therm</option>
+              <option class="hidden" id="ft3" value="ft3">Cubic foot (ft&sup3;)</option>
+              <option class="hidden" id="L" value="L">Litre</option>
+              <option class="hidden" id="gal" value="gal">US gallon</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3" id="furnace">
+          <label for="efficiency" class="form-label">Furnace Efficiency (%)</label>
+          <input type="text" class="form-control" id="efficiency" aria-describedby="efficiencyHelp"
+              onchange="calculate()">
+          <div id="efficiencyHelp" class="form-text">For example 95%</div>
+        </div>
+        <hr>
+        <div class="mb-3">
+          <label for="priceElectricity" class="form-label">Electricity Price</label>
+          <input type="text" class="form-control" id="priceElectricity" aria-describedby="priceElectricityHelp"
+              onchange="calculate()">
+          <div id="priceElectricityHelp" class="form-text">Enter price in dollars. Ex. $0.10 per kWh</div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="heatPump" class="form-label">Heat Pump Heating Performance</label>
+            <input type="text" class="form-control" id="heatPump" aria-describedby="heatPumpHelp" onchange="calculate()">
+            <div id="heatPumpHelp" class="form-text">Heat pump specification used to calculate heat output.</div>
+          </div>
+          <div class="col">
+            <label for="heatPumpUnit" class="form-label">Unit</label>
+            <select id="heatPumpUnit" class="form-select" aria-label="" onchange="calculate()">
+              <option selected></option>
+              <option value="COP">COP</option>
+              <option value="HSPF">HSPF</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="cooling" class="form-label">Heat Pump Cooling Performance</label>
+            <input type="text" class="form-control" id="cooling" aria-describedby="coolingHelp" onchange="calculate()">
+            <div id="coolingHelp" class="form-text">Heat pump SEER used to calculate cooling performance.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="oldWindows" class="form-label">Old Windows Performance</label>
+            <input type="text" class="form-control" id="oldWindows" aria-describedby="oldWindowsHelp" onchange="calculate()">
+            <div id="oldWindowsHelp" class="form-text">If Windows are over 20 years old assume R1 per pane of glass.</div>
+          </div>
+          <div class="col">
+            <label for="oldWindowsUnit" class="form-label">Unit</label>
+            <select id="oldWindowsUnit" class="form-select" aria-label="" onchange="calculate()">
+              <option selected></option>
+              <option value="R">R-value</option>
+              <option value="U_metric">W/m&sup2;·K</option>
+              <option value="U_imperial">Btu/h·ft&sup2;·F</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="newWindows" class="form-label">New Windows Performance</label>
+            <input type="text" class="form-control" id="newWindows" onchange="calculate()">
+          </div>
+          <div class="col">
+            <label for="newWindowsUnit" class="form-label">Unit</label>
+            <select id="newWindowsUnit" class="form-select" aria-label="" onchange="calculate()">
+              <option selected></option>
+              <option value="R">R-value</option>
+              <option value="U_metric">W/m&sup2;·K</option>
+              <option value="U_imperial">Btu/h·ft&sup2;·F</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="windowArea" class="form-label">Total Window area</label>
+            <input type="text" class="form-control" id="windowArea" aria-describedby="windowAreaHelp" onchange="calculate()">
+            <div id="windowAreaHelp" class="form-text">Calculate the area of each window then add them together.</div>
+          </div>
+          <div class="col">
+            <label for="windowAreaUnit" class="form-label">Unit</label>
+            <select id="windowAreaUnit" class="form-select" aria-label="" onchange="calculate()">
+              <option selected></option>
+              <option value="ft2">ft&sup2;</option>
+              <option value="m2">m&sup2;</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="city" class="form-label">City</label>
+          <input class="form-control" list="cityOptions" id="city" placeholder="Type to search city..." onchange="calculate()">
+          <datalist id="cityOptions">
+          </datalist>
+        </div>
+
+        <div class="row">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Average Temperature</th>
+                <th scope="col">Temperature Difference</th>
+                <th scope="col">Savings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>January</td>
+                <td id="m_0"></td>
+                <td id="md_0"></td>
+                <td id="mh_0"></td>
+              </tr>
+              <tr>
+                <td>February</td>
+                <td id="m_1"></td>
+                <td id="md_1"></td>
+                <td id="mh_1"></td>
+              </tr>
+              <tr>
+                <td>March</td>
+                <td id="m_2"></td>
+                <td id="md_2"></td>
+                <td id="mh_2"></td>
+              </tr>
+              <tr>
+                <td>April</td>
+                <td id="m_3"></td>
+                <td id="md_3"></td>
+                <td id="mh_3"></td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td id="m_4"></td>
+                <td id="md_4"></td>
+                <td id="mh_4"></td>
+              </tr>
+              <tr>
+                <td>June</td>
+                <td id="m_5"></td>
+                <td id="md_5"></td>
+                <td id="mh_5"></td>
+              </tr>
+              <tr>
+                <td>July</td>
+                <td id="m_6"></td>
+                <td id="md_6"></td>
+                <td id="mh_6"></td>
+              </tr>
+              <tr>
+                <td>August</td>
+                <td id="m_7"></td>
+                <td id="md_7"></td>
+                <td id="mh_7"></td>
+              </tr>
+              <tr>
+                <td>September</td>
+                <td id="m_8"></td>
+                <td id="md_8"></td>
+                <td id="mh_8"></td>
+              </tr>
+              <tr>
+                <td>October</td>
+                <td id="m_9"></td>
+                <td id="md_9"></td>
+                <td id="mh_9"></td>
+              </tr>
+              <tr>
+                <td>November</td>
+                <td id="m_10"></td>
+                <td id="md_10"></td>
+                <td id="mh_10"></td>
+              </tr>
+              <tr>
+                <td>December</td>
+                <td id="m_11"></td>
+                <td id="md_11"></td>
+                <td id="mh_11"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="form-text">Temperature data is from https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities</div>
+        </div>
+
+        <div class="row">
+          <p>Annual Savings: $<span id="yearlyDifference"></span></p>
+        </div>
+
+        <div class="row">
+          <label for="windowsCost" class="form-label">Cost of new windows</label>
+          <input type="text" class="form-control" id="windowsCost" aria-describedby="windowsCostHelp" onchange="calculate()">
+          <div id="windowsCostHelp" class="form-text">Cost to install new windows.</div>
+        </div>
+
+        <div class="row">
+          <p>After <span id="breakEvenYear" class="fw-bold"></span> years the cost of the new windows will break even, after that you are saving money. Will the argon even last that long?</p>
+        </div>
+
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="temperatureDataSet.js"></script>
+    <script src="windows.js"></script>
+  </body>
+</html>
