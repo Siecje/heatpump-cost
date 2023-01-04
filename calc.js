@@ -250,8 +250,4 @@ function calculateCOP(){
   }
 }
 
-export {
-  calculateCOP as calculateCOP,
-  setExisting as setExisting,
-  onLoad as onLoad,
-}
+document.addEventListener('DOMContentLoaded', onLoad, false);

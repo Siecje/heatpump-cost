@@ -247,13 +247,6 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="temperatureDataSet.js"></script>
-    <script type="module" src="calc.js"></script>
-    <script type="module">
-      import { calculateCOP, onLoad, setExisting } from '/calc.js';
-      window.setExisting = setExisting;
-      window.calculateCOP = calculateCOP;
-    
-      document.addEventListener('DOMContentLoaded', onLoad, false);
-    </script>
+    <script src="calc.js"></script>
   </body>
 </html>
