@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start": "http-server -a localhost -p 8000 -c-1"
+  },
+  "devDependencies": {
+    "cypress": "^12.2.0",
+    "http-server": "^14.1.1"
+  },
+  "type": "module",
+  "dependencies": {
+    "start": "^5.1.0"
+  }
+}

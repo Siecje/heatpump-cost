@@ -1,22 +1,3 @@
-"use strict";
-
-function preFillForm(){
-  document.getElementById("existing").value = "1";
-  document.getElementById("price").value = "0.79";
-  document.getElementById("unit").value = "L";
-  document.getElementById("efficiency").value = "95";
-  document.getElementById("electricity_price").value = "0.11";
-  document.getElementById("fuelUsed").value = "1660";
-  // document.getElementById("heatLoss").value = "22515";
-  // document.getElementById("heatLossUnit").value = "BTUh";
-  document.getElementById("city").value = "Ottawa";
-  document.getElementById("heatPump").value = "9";
-  document.getElementById("heatPumpUnit").value = "HSPF";
-  document.getElementById("heatPumpCost").value = "20000";
-  calculateCOP();
-}
-
-
 function addCitySuggestions(){
   let datalist = document.getElementById("cityOptions");
   for (const cityData of temperatureDataSet){
@@ -29,9 +10,8 @@ function addCitySuggestions(){
 
 function onLoad(){
   addCitySuggestions();
-  // preFillForm();
 }
-document.addEventListener('DOMContentLoaded', onLoad, false);
+
 
 // Sources
 // https://www.eia.gov/energyexplained/units-and-calculators/
@@ -182,7 +162,7 @@ function calculateCOP(){
   if (heatPumpSpecUnit === "HSPF"){
     hpCOP = hpCOP / 3.41;
   }
-  
+
   let ratio = equivalentCOP / hpCOP;
   let text = "";
   if(hpCOP > equivalentCOP){
@@ -199,19 +179,21 @@ function calculateCOP(){
   let yearlyDifference = 0;
   let fuelused = document.getElementById("fuelUsed").value;
 
+  let costHeatingSeasonExisting = 0;
+  let costHeatingSeasonHP = 0;
   if (fuelused){
-    let costHeatingSeasonExisting = fuelused * price;
+    costHeatingSeasonExisting = fuelused * price;
     let heatNeeded_kWh = fuelused * kWhPerUnit[unit] * efficiencyAsDecimal;
     // reduce heatNeeded_kWh by COP then multiple by price
-    let costHeatingSeasonHP = (heatNeeded_kWh / hpCOP) * electricity_price;
-    let seasonalSavingsText = 'Every heating season that heat pump will ';
+    costHeatingSeasonHP = (heatNeeded_kWh / hpCOP) * electricity_price;
+    let seasonalSavingsText = 'Every heating season with that heat pump will ';
     if (costHeatingSeasonExisting > costHeatingSeasonHP) {
       yearlyDifference = costHeatingSeasonExisting - costHeatingSeasonHP;
       seasonalSavingsText += 'save $' + yearlyDifference.toFixed(2);
     }
     else if (costHeatingSeasonExisting < costHeatingSeasonHP){
       yearlyDifference = costHeatingSeasonHP - costHeatingSeasonExisting;
-      seasonalSavingsText += 'cost $' + yearlyDifference.toFixed(2) + 'more.';
+      seasonalSavingsText += 'cost $' + yearlyDifference.toFixed(2) + ' more.';
     }
     else {
       seasonalSavingsText += 'cost the same.';
@@ -227,15 +209,10 @@ function calculateCOP(){
     if (energyPerHourUnit === "BTUh"){
       energyPerHour = energyPerHour / 3412;
     }
-    let otherCostPerHour = (energyPerHour / realkWhPerUnit) * costPerkWhHeat;
-    let hpCostPerHour = (energyPerHour / ratio) * electricity_price;
+    let otherCostPerHour = energyPerHour * costPerkWhHeat;
+    let hpCostPerHour = (energyPerHour / hpCOP) * electricity_price;
     let hourlyDifference;
-    if(otherCostPerHour > hpCostPerHour){
-      hourlyDifference = otherCostPerHour - hpCostPerHour;
-    }
-    else {
-      hourlyDifference = hpCostPerHour - otherCostPerHour;
-    }
+    hourlyDifference = otherCostPerHour - hpCostPerHour;
     document.getElementById("hourlyDifference").innerText = hourlyDifference.toFixed(2);
     let monthlyDifference = hourlyDifference * 24 * 30;
     document.getElementById("monthlyDifference").innerText = monthlyDifference.toFixed(0);
@@ -245,15 +222,14 @@ function calculateCOP(){
       return;
     }
     let temperatureData = getTemperatureData(city);
-    let numMonthsOfHeat = getNumberOfHeatingMonths(temperatureData);
-
-    if (numMonthsOfHeat > 0){
-      yearlyDifference = hourlyDifference * 24 * 30 * numMonthsOfHeat;
+    if (temperatureData){
+      let numMonthsOfHeat = getNumberOfHeatingMonths(temperatureData);
+      document.getElementById("numHeatingMonths").innerText = numMonthsOfHeat;
+      if (numMonthsOfHeat > 0){
+        yearlyDifference = monthlyDifference * numMonthsOfHeat;
+      }
     }
-  
-    document.getElementById("numHeatingMonths").innerText = numMonthsOfHeat;
   }
-
   
   document.getElementById("yearlyDifference").innerText = yearlyDifference.toFixed(0);
 
@@ -263,6 +239,19 @@ function calculateCOP(){
     heatPumpCost -= otherCost;
   }
   
-  let breakEvenYear = heatPumpCost / yearlyDifference;
-  document.getElementById("breakEvenYear").innerText = breakEvenYear.toFixed(2);
+  if ((!fuelused && yearlyDifference > 0)
+  || costHeatingSeasonExisting > costHeatingSeasonHP){
+    let breakEvenYear = heatPumpCost / yearlyDifference;
+    document.getElementById("breakEvenYear").innerText = breakEvenYear.toFixed(2); 
+    document.getElementById("breakEvenParagraph").style.visibility = "visible";
+  }
+  else {
+    document.getElementById("breakEvenParagraph").style.visibility = "hidden";
+  }
+}
+
+export {
+  calculateCOP as calculateCOP,
+  setExisting as setExisting,
+  onLoad as onLoad,
 }
