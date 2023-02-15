@@ -115,8 +115,38 @@ function getNumberOfHeatingMonths(temperatureData){
   return count;
 }
 
-
 function calculateCOP(){
+  // Cooling
+  let seer2 = document.getElementById("seer2").value;
+  let heatPumpSEER2 = document.getElementById("heatPumpSEER2").value;
+  let heatPumpSEER2Unit = document.getElementById("heatPumpSEER2Unit").value;
+
+  let acCOP;
+  let hpAcCOP;
+  if (seer2 && heatPumpSEER2 && heatPumpSEER2Unit){
+    // To convert SEER to COP, multiply by 0.293 or 1055/3600
+    // SEER vs SEER2: SEER2 will just be lower (more correct)
+    acCOP = seer2 * (1055/3600);
+    if(heatPumpSEER2Unit === "SEER2"){
+      hpAcCOP = heatPumpSEER2 * (1055/3600);
+    }
+    else if (heatPumpSEER2Unit === "COP"){
+      hpAcCOP = heatPumpSEER2;
+    }
+    let acText = "";
+    let acRatio = acCOP / hpAcCOP;
+    if (hpAcCOP > acCOP) {
+      acText = ((1 - acRatio) * 100).toFixed(0) + "% LESS";
+    }
+    else if(hpAcCOP < acCOP){
+      acText = ((acRatio - 1) * 100).toFixed(0) + "% MORE";
+    }
+    else {
+      acText = " the same";
+    }
+    document.getElementById("acCostMultiplier").innerText = acText;
+  }
+
   let price = Number(document.getElementById("price").value);
   let unit = document.getElementById("unit").value;
   let efficiency = Number(document.getElementById("efficiency").value);
@@ -166,13 +196,13 @@ function calculateCOP(){
   let ratio = equivalentCOP / hpCOP;
   let text = "";
   if(hpCOP > equivalentCOP){
-    text = ((1 - ratio) * 100).toFixed(0) + "% LESS."
+    text = ((1 - ratio) * 100).toFixed(0) + "% LESS";
   }
   else if(hpCOP < equivalentCOP){
-    text = ((ratio - 1) * 100).toFixed(0) + "% MORE."
+    text = ((ratio - 1) * 100).toFixed(0) + "% MORE";
   }
   else {
-    text = " the same."
+    text = " the same";
   }
   document.getElementById("costMultiplier").innerText = text;
 
@@ -240,7 +270,7 @@ function calculateCOP(){
   }
   
   if ((!fuelused && yearlyDifference > 0)
-  || costHeatingSeasonExisting > costHeatingSeasonHP){
+      || costHeatingSeasonExisting > costHeatingSeasonHP){
     let breakEvenYear = heatPumpCost / yearlyDifference;
     document.getElementById("breakEvenYear").innerText = breakEvenYear.toFixed(2); 
     document.getElementById("breakEvenParagraph").style.visibility = "visible";

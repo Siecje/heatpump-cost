@@ -61,7 +61,30 @@
         </div>
         <div class="row">
           <div class="col">
-            <label for="heatPump" class="form-label">Heat Pump Performance</label>
+            <label for="seer2" class="form-label">Current Air Conditioner SEER/SEER2</label>
+            <input type="text" class="form-control" id="seer2" aria-describedby="seer2Help"
+              oninput="calculateCOP()">
+            <div id="seer2Help" class="form-text">Seasonal energy efficiency ratio.</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="heatPumpSEER2" class="form-label">New Heat Pump Cooling Performance</label>
+            <input type="text" class="form-control" id="heatPumpSEER2" aria-describedby="heatPumpSEER2Help" oninput="calculateCOP()">
+            <div id="heatPumpSEER2Help" class="form-text">Heat pump specification used to calculate cooling output.</div>
+          </div>
+          <div class="col">
+            <label for="heatPumpSEER2Unit" class="form-label">Unit</label>
+            <select id="heatPumpSEER2Unit" class="form-select" aria-label="" onchange="calculateCOP()">
+              <option selected></option>
+              <option value="COP">COP</option>
+              <option value="SEER2">SEER/SEER2</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="heatPump" class="form-label">New Heat Pump Heating Performance</label>
             <input type="text" class="form-control" id="heatPump" aria-describedby="heatPumpHelp" oninput="calculateCOP()">
             <div id="heatPumpHelp" class="form-text">Heat pump specification used to calculate heat output.</div>
           </div>
@@ -75,7 +98,8 @@
           </div>
         </div>
         <div class="row">
-          <p>Heat from the heat pump will cost <span id="costMultiplier" class="fw-bold"></span></p>
+          <p>Cooling from the heat pump will cost <span id="acCostMultiplier" class="fw-bold"></span>.</p>
+          <p>Heat from the heat pump will cost <span id="costMultiplier" class="fw-bold"></span>.</p>
           <p>The heat pump is cheaper as long as the COP is larger than <span id="cop" class="fw-bold"></span>.</p>
           <p>Check at which temperature the heat pump has a larger COP.</p>
         </div>

@@ -98,4 +98,20 @@ describe('The Home Page', () => {
     cy.get('#otherCost').type("0");
     cy.get('#breakEvenParagraph').should('not.be.visible');
   });
-})
+
+  it('should show cooling savings SEER', () => {
+    cy.visit('/');
+    cy.get('#seer2').type("14");
+    cy.get('#heatPumpSEER2').type("17");
+    cy.get('#heatPumpSEER2Unit').select("SEER2");
+    cy.get('#acCostMultiplier').should('have.text', '18% LESS');
+  });
+
+  it('should show cooling savings COP', () => {
+    cy.visit('/');
+    cy.get('#seer2').type("14");
+    cy.get('#heatPumpSEER2').type("4.98");
+    cy.get('#heatPumpSEER2Unit').select("COP");
+    cy.get('#acCostMultiplier').should('have.text', '18% LESS');
+  });
+});
