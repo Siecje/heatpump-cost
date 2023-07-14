@@ -147,10 +147,10 @@ function calculateCOP(){
     document.getElementById("acCostMultiplier").innerText = acText;
   }
 
-  let price = Number(document.getElementById("price").value);
+  let price = Number(document.getElementById("price").value.replaceAll("$", ""));
   let unit = document.getElementById("unit").value;
   let efficiency = Number(document.getElementById("efficiency").value);
-  let electricity_price = Number(document.getElementById("electricity_price").value);
+  let electricity_price = Number(document.getElementById("electricity_price").value.replaceAll("$", ""));
 
   let efficiencyAsDecimal;
   let equivalentCOP;
