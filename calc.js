@@ -265,7 +265,7 @@ function calculateCOP(){
 
   let heatPumpCost = document.getElementById("heatPumpCost").value;
   let otherCost = Number(document.getElementById("otherCost").value);
-  if (Number.isInteger(otherCost)){
+  if (Number.isFinite(otherCost)){
     heatPumpCost -= otherCost;
   }
   
