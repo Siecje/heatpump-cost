@@ -20,6 +20,7 @@ const kWhPerUnit = {
   "m3": 10.55,
   "ft3": 0.3045008,
   "therm": 29.307107,
+  "GJ": 277.78,
   // Propane
   "L": 7.08,
   "gal": 26.801936,
@@ -54,7 +55,7 @@ function setExisting(){
     let emptyOption = document.getElementById("emptyOption");
     emptyOption.style.display = "block";
 
-    displayIds(["m3", "therm", "ft3"]);
+    displayIds(["ft3", "m3", "GJ", "therm"]);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -62,8 +63,8 @@ function setExisting(){
     let existingFurnace = document.getElementById("existingFurnace");
     existingFurnace.style.display = "block";
   }
-  else if (existingHeat === "1" || existingHeat === "2"){
-    displayIds(["L", "gal"]);
+  else if (existingHeat === "1" || existingHeat === "2"){ // Propane or Oil
+    displayIds(["L", "gal", "GJ"]);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -71,7 +72,7 @@ function setExisting(){
     let existingFurnace = document.getElementById("existingFurnace");
     existingFurnace.style.display = "block";
   }
-  else if (existingHeat === "3"){
+  else if (existingHeat === "3"){ // Electric
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "none";
 

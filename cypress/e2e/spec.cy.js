@@ -114,4 +114,29 @@ describe('The Home Page', () => {
     cy.get('#heatPumpSEER2Unit').select("COP");
     cy.get('#acCostMultiplier').should('have.text', '18% LESS');
   });
+
+  it('should support GJ unit', () => {
+    cy.visit('/');
+    // Select natural gas
+    cy.get('#existing').select("0");
+    cy.get('#existing').find('option:selected').should('have.text', 'Natural Gas');
+
+    cy.get('#unit option[value="GJ"]').should('be.visible');
+    cy.get('#unit').select("GJ");
+    cy.get('#price').type("12.04");
+
+    cy.get('#efficiency').type("80");
+    cy.get('#electricity_price').type("0.15");
+    cy.get('#heatPump').type("9");
+    cy.get('#heatPumpUnit').select("HSPF");
+    cy.get('#cop').should('have.text', '2.77');
+    cy.get('#heatLossTab').click();
+    cy.get('#heatLossTabContent').should('be.visible');
+    cy.get('#heatLoss').type("24000");
+    cy.get('#heatLossUnit').select("BTUh");
+    cy.get('#city').type("Edmonton");
+    cy.get('#heatPumpCost').type("20000");
+    cy.get('#otherCost').type("1500");
+    cy.get('#breakEvenParagraph').should('not.be.visible');
+  });
 });
