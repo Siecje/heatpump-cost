@@ -12,6 +12,55 @@ function onLoad(){
   addCitySuggestions();
 }
 
+function setCurrency(element){
+  const currencySymbol = element.value;
+  // Set both inputs to the same value
+  document.getElementById('currency').value = currencySymbol;
+  const currency2Element = document.getElementById('currency2')
+  currency2Element.value = currencySymbol;
+  if (currencySymbol === ''){
+    currency2Element.readOnly = false;
+  }
+  else if (element.id === 'currency'){
+    currency2Element.readOnly = true;
+  }
+
+  // Set currency symbol everywhere data-currency pattern is used  
+  const elementsToSetText = document.querySelectorAll('[data-currency]');
+  for (const el of elementsToSetText){
+    if (currencySymbol === ''){
+      el.innerText = '';
+    }
+    else {
+      el.innerText = el.dataset.currency.replace(/\${}/g, currencySymbol);
+    }
+  }
+
+  // Create elements before or after depending on currency symbol
+  // Delete existing elements if currency symbol has already been set previously
+  const previouslyCreated = document.querySelectorAll("[data-currency-symbol]");
+  for (const prev of previouslyCreated){
+    prev.remove();
+  }
+
+  // element ids which need a currency symbol either before or after
+  const siblingIds = ['hourlyDifference', 'monthlyDifference', 'yearlyDifference'];
+
+  const afterSymbols = ['¢', '₹', 'R$', '€', '£'];
+  const after = afterSymbols.includes(currencySymbol);
+  for (const siblingId of siblingIds){
+    const sibling = document.getElementById(siblingId);
+    const newElement = document.createElement('span');
+    newElement.setAttribute('data-currency-symbol', "");
+    newElement.textContent = currencySymbol;
+    if (after){
+      sibling.insertAdjacentElement('afterend', newElement);
+    }
+    else {
+      sibling.parentNode.insertBefore(newElement, sibling);
+    }
+  }
+}
 
 // Sources
 // https://www.eia.gov/energyexplained/units-and-calculators/

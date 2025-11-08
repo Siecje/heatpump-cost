@@ -31,7 +31,14 @@
             <input type="text" class="form-control" id="price" aria-describedby="priceHelp"
               oninput="calculateCOP()"
             >
-            <div id="priceHelp" class="form-text">Enter price in dollars.</div>
+            <div id="priceHelp" class="form-text">Enter price per unit and select unit.</div>
+          </div>
+          <div class="col">
+            <label for="currency" class="form-label">Currency Unit</label>
+            <input type="text" class="form-control" id="currency" aria-describedby="currencyHelp"
+              oninput="setCurrency(this)"
+            >
+            <div id="currencyHelp" class="form-text">Enter currency of existing fuel price.</div>
           </div>
           <div class="col">
             <label for="unit" class="form-label">Unit</label>
@@ -54,11 +61,20 @@
           <div id="efficiencyHelp" class="form-text">For example 95%</div>
         </div>
         <hr>
-        <div class="mb-3">
-          <label for="electricity_price" class="form-label">Electricity Price</label>
-          <input type="text" class="form-control" id="electricity_price" aria-describedby="electricity_priceHelp"
-            oninput="calculateCOP()">
-          <div id="electricity_priceHelp" class="form-text">Enter price in dollars. Ex. $0.10 per kWh</div>
+        <div class="row">
+          <div class="col">
+            <label for="electricity_price" class="form-label">Electricity Price</label>
+            <input type="text" class="form-control" id="electricity_price" aria-describedby="electricity_priceHelp"
+              oninput="calculateCOP()">
+            <div id="electricity_priceHelp" class="form-text">Enter price per kWh in the same unit as fuel cost<span data-currency=" (${})"></span>.</div>
+          </div>
+          <div class="col">
+            <label for="currency2" class="form-label">Currency Unit</label>
+            <input type="text" class="form-control" id="currency2" aria-describedby="currencyHelp"
+              oninput="setCurrency(this)"
+            >
+            <div id="currencyHelp" class="form-text">Enter currency.</div>
+          </div>
         </div>
         <div class="row">
           <div class="col">
@@ -161,8 +177,8 @@
                 </div>
               </div>
               <div class="row">
-                <p>Hourly Savings: $<span id="hourlyDifference"></span></p>
-                <p>Monthly Savings: $<span id="monthlyDifference"></span></p>
+                <p>Hourly Savings: <span id="hourlyDifference"></span></p>
+                <p>Monthly Savings: <span id="monthlyDifference"></span></p>
               </div>
 
               <div class="row">
@@ -247,7 +263,7 @@
               </div>
               <div class="row">
                 <p>Number of Heating Months: <span id="numHeatingMonths"></span></p>
-                <p>Yearly Savings: $<span id="yearlyDifference"></span></p>
+                <p>Yearly Savings: <span id="yearlyDifference"></span></p>
               </div>
 
             </div>
