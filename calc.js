@@ -1,3 +1,49 @@
+const formInputIds = [
+  'existing',
+  'price',
+  'currency',
+  'unit',
+  'efficiency',
+  'electricity_price',
+  'seer2',
+  'heatPumpSEER2',
+  'heatPumpSEER2Unit',
+  'heatPump',
+  'heatPumpUnit',
+  'fuelUsed',
+  'heatLoss',
+  'heatLossUnit',
+  'city',
+  'heatPumpCost',
+  'otherCost'
+];
+
+function fillForm(){
+  const urlParams = new URLSearchParams(window.location.search);
+
+  for (const id of formInputIds){
+    if (urlParams.has(id)) {
+      document.getElementById(id).value = urlParams.get(id);
+    }
+  }
+  setExisting();
+  calculateCOP();
+}
+
+function updateURL(){
+  const params = new URLSearchParams();
+
+  for (const id of formInputIds){
+    const inputValue = document.getElementById(id).value
+    if (inputValue) {
+      params.set(id, inputValue);
+    }
+  }
+
+  // Use history.replaceState to not change back button behavior
+  history.replaceState(null, '', `?${params.toString()}`);
+}
+
 function addCitySuggestions(){
   let datalist = document.getElementById("cityOptions");
   for (const cityData of temperatureDataSet){
@@ -8,7 +54,9 @@ function addCitySuggestions(){
 }
 
 
+
 function onLoad(){
+  fillForm();
   addCitySuggestions();
 }
 
@@ -94,17 +142,21 @@ function displayIds(ids){
 }
 
 function setExisting(){
+  updateURL();
   let existingHeat = document.getElementById("existing").value;
   let unitSelect = document.getElementById("unit");
 
-  unitSelect.value = "";
+  const currentValue = unitSelect.value;
 
+  // Set valid options
   hideAllChildren(unitSelect);
+  let validOptions = [];
   if (existingHeat === "0"){ // Natural Gas
     let emptyOption = document.getElementById("emptyOption");
     emptyOption.style.display = "block";
 
-    displayIds(["ft3", "m3", "GJ", "therm"]);
+    validOptions = ["ft3", "m3", "GJ", "therm"];
+    displayIds(validOptions);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -113,7 +165,8 @@ function setExisting(){
     existingFurnace.style.display = "block";
   }
   else if (existingHeat === "1" || existingHeat === "2"){ // Propane or Oil
-    displayIds(["L", "gal", "GJ"]);
+    validOptions = ["L", "gal", "GJ"];
+    displayIds(validOptions);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -127,6 +180,14 @@ function setExisting(){
 
     let existingFurnace = document.getElementById("existingFurnace");
     existingFurnace.style.display = "none";
+  }
+
+  // Restore currentValue if valid
+  if (validOptions.includes(currentValue)) {
+    unitSelect.value = currentValue;
+  }
+  else {
+    unitSelect.value = "";
   }
 }
 
@@ -166,6 +227,8 @@ function getNumberOfHeatingMonths(temperatureData){
 }
 
 function calculateCOP(){
+  // Update URL
+  updateURL();
   // Cooling
   let seer2 = document.getElementById("seer2").value;
   let heatPumpSEER2 = document.getElementById("heatPumpSEER2").value;
@@ -328,6 +391,14 @@ function calculateCOP(){
   else {
     document.getElementById("breakEvenParagraph").style.visibility = "hidden";
   }
+}
+
+function copyURLToClipboard(){
+  const url = window.location.href;
+  navigator.clipboard.writeText(url)
+    .catch(err => {
+      console.error('Error copying URL: ', err);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', onLoad, false);
