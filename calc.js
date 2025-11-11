@@ -21,6 +21,9 @@ const formInputIds = [
 function fillForm(){
   const urlParams = new URLSearchParams(window.location.search);
 
+  if(urlParams.size === 0){
+    return;
+  }
   for (const id of formInputIds){
     if (urlParams.has(id)) {
       document.getElementById(id).value = urlParams.get(id);
@@ -41,7 +44,10 @@ function updateURL(){
   }
 
   // Use history.replaceState to not change back button behavior
-  history.replaceState(null, '', `?${params.toString()}`);
+  if(params.size > 0){
+    const paramsStr = params.toString();
+    history.replaceState(null, '', `?${paramsStr}`);
+  }
 }
 
 function addCitySuggestions(){
