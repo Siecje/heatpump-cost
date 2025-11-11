@@ -257,13 +257,13 @@ function calculateCOP(){
     let acText = "";
     let acRatio = acCOP / hpAcCOP;
     if (hpAcCOP > acCOP) {
-      acText = ((1 - acRatio) * 100).toFixed(0) + "% LESS";
+      acText = ((1 - acRatio) * 100).toFixed(0) + "% LESS.";
     }
     else if(hpAcCOP < acCOP){
-      acText = ((acRatio - 1) * 100).toFixed(0) + "% MORE";
+      acText = ((acRatio - 1) * 100).toFixed(0) + "% MORE.";
     }
     else {
-      acText = " the same";
+      acText = " the same.";
     }
     document.getElementById("acCostMultiplier").innerText = acText;
   }
@@ -302,7 +302,15 @@ function calculateCOP(){
     return;
   }
 
-  document.getElementById("cop").innerText = equivalentCOP.toFixed(2);
+  const periodElement = document.getElementById("period");
+  const copElement = document.getElementById("cop");
+  copElement.innerText = equivalentCOP.toFixed(2);
+  if (equivalentCOP && !periodElement){
+    // Insert the span after the existing cop text
+    copElement.insertAdjacentHTML("afterend", '<span id="period">.</span>');
+  } else if (!equivalentCOP && periodElement){
+    periodElement.remove();
+  }
 
   let heatPumpSpec = document.getElementById("heatPump").value;
   let heatPumpSpecUnit = document.getElementById("heatPumpUnit").value;
@@ -317,13 +325,13 @@ function calculateCOP(){
   let ratio = equivalentCOP / hpCOP;
   let text = "";
   if(hpCOP > equivalentCOP){
-    text = ((1 - ratio) * 100).toFixed(0) + "% LESS";
+    text = ((1 - ratio) * 100).toFixed(0) + "% LESS.";
   }
   else if(hpCOP < equivalentCOP){
-    text = ((ratio - 1) * 100).toFixed(0) + "% MORE";
+    text = ((ratio - 1) * 100).toFixed(0) + "% MORE.";
   }
   else {
-    text = " the same";
+    text = " the same.";
   }
   document.getElementById("costMultiplier").innerText = text;
 
