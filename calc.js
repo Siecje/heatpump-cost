@@ -31,6 +31,7 @@ function fillForm(){
   }
   setExisting();
   calculateCOP();
+  setCurrency(document.getElementById('currency'));
 }
 
 function updateURL(){
@@ -114,6 +115,7 @@ function setCurrency(element){
       sibling.parentNode.insertBefore(newElement, sibling);
     }
   }
+  updateURL();
 }
 
 // Sources
