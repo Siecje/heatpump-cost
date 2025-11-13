@@ -1,4 +1,5 @@
-//Country,City,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,Year,Continent
+// https://www.kaggle.com/datasets/swapnilbhange/average-temperature-of-cities
+// Country,City,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,Year,Continent
 const temperatureDataSet = [
 ["Algeria","Algiers",11.2,11.9,12.8,14.7,17.7,21.3,24.6,25.2,23.2,19.4,15.2,12.1,17.4,"AFRICA"],
 ["Algeria","Tamanrasset",12.8,15.0,18.1,22.2,26.1,28.9,28.7,28.2,26.5,22.4,17.3,13.9,21.7,"AFRICA"],
