@@ -1,18 +1,21 @@
+const radioInputNames = [
+  'existing_heating_method',
+  'heatLossUnit',
+  'heatPumpSEER2Unit',
+  'heatPumpUnit',
+  'unit'
+]
+
 const formInputIds = [
-  'existing',
   'price',
   'currency',
-  'unit',
   'efficiency',
   'electricity_price',
   'seer2',
   'heatPumpSEER2',
-  'heatPumpSEER2Unit',
   'heatPump',
-  'heatPumpUnit',
   'fuelUsed',
   'heatLoss',
-  'heatLossUnit',
   'city',
   'heatPumpCost',
   'otherCost'
@@ -24,18 +27,34 @@ function fillForm(){
   if(urlParams.size === 0){
     return;
   }
-  for (const id of formInputIds){
-    if (urlParams.has(id)) {
-      document.getElementById(id).value = urlParams.get(id);
+
+  for (const name of radioInputNames) {
+    if (urlParams.has(name)) {
+      const value = urlParams.get(name);
+      const radioButton = document.querySelector(`input[name="${name}"][value="${value}"]`);
+      radioButton.checked = true;
     }
   }
-  setExisting();
+  for (const id of formInputIds){
+    if (urlParams.has(id)) {
+      const value = urlParams.get(id);
+      document.getElementById(id).value = value;
+    }
+  }
+  setExistingHeatingMethod();
   calculateCOP();
   setCurrency(document.getElementById('currency'));
 }
 
 function updateURL(){
   const params = new URLSearchParams();
+
+  for (const name of radioInputNames) {
+    const checkedRadio = document.querySelector(`input[name="${name}"]:checked`);
+    if (checkedRadio) {
+      params.set(name, checkedRadio.value);
+    }
+  }
 
   for (const id of formInputIds){
     const inputValue = document.getElementById(id).value
@@ -137,34 +156,44 @@ const kWhPerUnit = {
 }
 
 
-function hideAllChildren(element){
-  for (let i = 0; i < element.children.length; i++) {
-    element.children[i].style.display = "none";
+function hideAllUnitRadios() {
+  const elements = document.querySelectorAll('input[name="unit"]');
+  for (const element of elements) {
+    // hide parent div
+    element.parentElement.style.display = 'none';
   }
 }
 
-function displayIds(ids){
-  for (const id of ids){
-    document.getElementById(id).style.display = "block";
+function displayRadiosByValue(name, values) {
+  const elements = document.querySelectorAll(`input[name="${name}"]`);
+  for (const element of elements) {
+    if (values.includes(element.value)) {
+      // show parent to show input and label
+      element.parentElement.style.display = 'block';
+    }
   }
 }
 
-function setExisting(){
+function setExistingHeatingMethod() {
   updateURL();
-  let existingHeat = document.getElementById("existing").value;
-  let unitSelect = document.getElementById("unit");
+  const existingRadio = document.querySelector('input[name="existing_heating_method"]:checked');
+  let existingHeat;
+  if (existingRadio) {
+    existingHeat = existingRadio.value;
+  }
 
-  const currentValue = unitSelect.value;
+  const unitRadio = document.querySelector('input[name="unit"]:checked');
+  let currentValue;
+  if (unitRadio) {
+    currentValue = unitRadio.value;
+  }
 
   // Set valid options
-  hideAllChildren(unitSelect);
+  hideAllUnitRadios();
   let validOptions = [];
-  if (existingHeat === "0"){ // Natural Gas
-    let emptyOption = document.getElementById("emptyOption");
-    emptyOption.style.display = "block";
-
+  if (existingHeat === 'natural_gas') {
     validOptions = ["ft3", "m3", "GJ", "therm"];
-    displayIds(validOptions);
+    displayRadiosByValue('unit', validOptions);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -172,9 +201,9 @@ function setExisting(){
     let existingFurnace = document.getElementById("existingFurnace");
     existingFurnace.style.display = "block";
   }
-  else if (existingHeat === "1" || existingHeat === "2"){ // Propane or Oil
+  else if (existingHeat === 'propane' || existingHeat === 'oil') {
     validOptions = ["L", "gal", "GJ"];
-    displayIds(validOptions);
+    displayRadiosByValue('unit', validOptions);
 
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "flex";
@@ -182,7 +211,7 @@ function setExisting(){
     let existingFurnace = document.getElementById("existingFurnace");
     existingFurnace.style.display = "block";
   }
-  else if (existingHeat === "3"){ // Electric
+  else if (existingHeat === 'electric') {
     let existingPrice = document.getElementById("existingPrice");
     existingPrice.style.display = "none";
 
@@ -191,11 +220,8 @@ function setExisting(){
   }
 
   // Restore currentValue if valid
-  if (validOptions.includes(currentValue)) {
-    unitSelect.value = currentValue;
-  }
-  else {
-    unitSelect.value = "";
+  if (currentValue && !validOptions.includes(currentValue)) {
+    unitRadio.checked = false;
   }
 }
 
@@ -255,7 +281,11 @@ function calculateCOP(){
   // Cooling
   let seer2 = document.getElementById("seer2").value;
   let heatPumpSEER2 = document.getElementById("heatPumpSEER2").value;
-  let heatPumpSEER2Unit = document.getElementById("heatPumpSEER2Unit").value;
+  let heatPumpSEER2Unit;
+  const heatPumpSEER2UnitRadio = document.querySelector('input[name="heatPumpSEER2Unit"]:checked');
+  if (heatPumpSEER2UnitRadio) {
+    heatPumpSEER2Unit = heatPumpSEER2UnitRadio.value;
+  }
 
   let acCOP;
   let hpAcCOP;
@@ -284,7 +314,11 @@ function calculateCOP(){
   }
 
   let price = Number(document.getElementById("price").value.replaceAll("$", ""));
-  let unit = document.getElementById("unit").value;
+  let unit;
+  const unitRadio = document.querySelector('input[name="unit"]:checked');
+  if (unitRadio) {
+    unit = unitRadio.value;
+  }
   let efficiency = Number(document.getElementById("efficiency").value);
   let electricity_price = Number(document.getElementById("electricity_price").value.replaceAll("$", ""));
 
@@ -292,8 +326,12 @@ function calculateCOP(){
   let equivalentCOP;
   let realkWhPerUnit;
   let costPerkWhHeat;
-  let existing = document.getElementById("existing").value;
-  if (existing === "3"){ // Electric Resistance
+  let existing;
+  const existingRadio = document.querySelector('input[name="existing_heating_method"]:checked');
+  if (existingRadio) {
+    existing = existingRadio.value;
+  }
+  if (existing === 'electric') {
     equivalentCOP = 1;
     unit = "kWh";
     efficiencyAsDecimal = 1;
@@ -302,10 +340,10 @@ function calculateCOP(){
     costPerkWhHeat = price / realkWhPerUnit;
   }
   else if (price && unit && efficiency){
-    if (unit == "L" && existing === "2"){
+    if (unit === 'L' && existing === 'oil') {
       unit = "oil_L";
     }
-    else if(unit == "gal" && existing == "2"){
+    else if (unit === 'gal' && existing === 'oil') {
       unit = "oil_gal";
     }
     efficiencyAsDecimal = efficiency * 0.01;
@@ -328,7 +366,12 @@ function calculateCOP(){
   }
 
   let heatPumpSpec = document.getElementById("heatPump").value;
-  let heatPumpSpecUnit = document.getElementById("heatPumpUnit").value;
+  let heatPumpSpecUnit;
+  const heatPumpSpecUnitRadio = document.querySelector('input[name="heatPumpUnit"]:checked');
+  if (heatPumpSpecUnitRadio) {
+    heatPumpSpecUnit = heatPumpSpecUnitRadio.value;
+  }
+
   if(!heatPumpSpecUnit){
     return;
   }
@@ -376,7 +419,12 @@ function calculateCOP(){
   }
   else {
     let energyPerHour = document.getElementById("heatLoss").value;
-    let energyPerHourUnit = document.getElementById("heatLossUnit").value;
+    let energyPerHourUnit;
+    const energyPerHourUnitRadio = document.querySelector('input[name="heatLossUnit"]:checked');
+    if (energyPerHourUnitRadio) {
+      energyPerHourUnit = energyPerHourUnitRadio.value;
+    }
+
     if (!energyPerHour || !energyPerHourUnit){
       return;
     }

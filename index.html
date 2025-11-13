@@ -16,16 +16,55 @@
       <h2>Is using a heat pump cheaper than other sources of heat?</h2>
       <form>
         <div class="mb-3">
-          <label for="existing" class="form-label">Heating Method</label>
-          <select aria-label="" class="form-select" id="existing" onchange="setExisting()">
-            <option value="" selected></option>
-            <option value="3">Electric Resistance</option>
-            <option value="0">Natural Gas</option>
-            <option value="2">Oil</option>
-            <option value="1">Propane</option>
-          </select>
+          <label class="form-label" for="existing_heating_method">Current Heating Method</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="electric" name="existing_heating_method" value="electric" onchange="setExistingHeatingMethod()">
+            <label class="form-check-label" for="electric">Electric Resistance</label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="natural_gas" name="existing_heating_method" value="natural_gas" onchange="setExistingHeatingMethod()">
+            <label class="form-check-label" for="natural_gas">Natural Gas</label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="oil" name="existing_heating_method" value="oil" onchange="setExistingHeatingMethod()">
+            <label class="form-check-label" for="oil">Oil</label>
+          </div>
+
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="propane" name="existing_heating_method" value="propane" onchange="setExistingHeatingMethod()">
+            <label class="form-check-label" for="propane">Propane</label>
+          </div>
         </div>
         <div class="row mb-3" id="existingPrice">
+          <div class="col">
+            <label class="form-label" for="unit">Billing Unit</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="L" name="unit" value="L" onchange="calculateCOP()">
+              <label class="form-check-label" for="L">Litre</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="ft3" name="unit" value="ft3" onchange="calculateCOP()">
+              <label class="form-check-label" for="ft3">Cubic foot (ft³)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="m3" name="unit" value="m3" onchange="calculateCOP()">
+              <label class="form-check-label" for="m3">Cubic Meter (m³)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="GJ" name="unit" value="GJ" onchange="calculateCOP()">
+              <label class="form-check-label" for="GJ">GJ</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="therm" name="unit" value="therm" onchange="calculateCOP()">
+              <label class="form-check-label" for="therm">Therm</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="gal" name="unit" value="gal" onchange="calculateCOP()">
+              <label class="form-check-label" for="gal">US gallon</label>
+            </div>
+          </div>
           <div class="col">
             <label for="price" class="form-label">Price per unit of fuel</label>
             <input type="text" class="form-control" id="price" aria-describedby="priceHelp"
@@ -39,19 +78,6 @@
               oninput="setCurrency(this)"
             >
             <div id="currencyHelp" class="form-text">Enter currency of existing fuel price.</div>
-          </div>
-          <div class="col">
-            <label for="unit" class="form-label">Unit</label>
-            <select id="unit" class="form-select" aria-label=""
-                onchange="calculateCOP()">
-              <option class="hidden" id="emptyOption" selected></option>
-              <option class="hidden" id="L" value="L">Litre</option>
-              <option class="hidden" id="ft3" value="ft3">Cubic foot (ft&sup3;)</option>
-              <option class="hidden" id="m3" value="m3">Cubic Meter (m&sup3;)</option>
-              <option class="hidden" id="GJ" value="GJ">GJ</option>
-              <option class="hidden" id="therm" value="therm">Therm</option>
-              <option class="hidden" id="gal" value="gal">US gallon</option>
-            </select>
           </div>
         </div>
         <div class="mb-3" id="existingFurnace">
@@ -91,12 +117,19 @@
             <div id="heatPumpSEER2Help" class="form-text">Heat pump specification used to calculate cooling output.</div>
           </div>
           <div class="col">
-            <label for="heatPumpSEER2Unit" class="form-label">Unit</label>
-            <select id="heatPumpSEER2Unit" class="form-select" aria-label="" onchange="calculateCOP()">
-              <option selected></option>
-              <option value="COP">COP</option>
-              <option value="SEER2">SEER/SEER2</option>
-            </select>
+            <label for="heatPumpSEER2Unit" class="form-label">Cooling Performance Unit</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="heatPumpSEER2Unit" id="copCool" value="COP" onchange="calculateCOP()">
+              <label class="form-check-label" for="copCool">
+                COP
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="heatPumpSEER2Unit" id="SEER2" value="SEER2" onchange="calculateCOP()">
+              <label class="form-check-label" for="SEER2">
+                SEER/SEER2
+              </label>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -106,12 +139,19 @@
             <div id="heatPumpHelp" class="form-text">Heat pump specification used to calculate heat output.</div>
           </div>
           <div class="col">
-            <label for="heatPumpUnit" class="form-label">Unit</label>
-            <select id="heatPumpUnit" class="form-select" aria-label="" onchange="calculateCOP()">
-              <option selected></option>
-              <option value="COP">COP</option>
-              <option value="HSPF">HSPF</option>
-            </select>
+            <label for="heatPumpUnit" class="form-label">Heating Performance Unit</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="heatPumpUnit" id="copHeat" value="COP" onchange="calculateCOP()">
+              <label class="form-check-label" for="copHeat">
+                COP
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="heatPumpUnit" id="HSPF" value="HSPF" onchange="calculateCOP()">
+              <label class="form-check-label" for="HSPF">
+                HSPF
+              </label>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -169,12 +209,21 @@
                   </div>
                 </div>
                 <div class="col">
-                  <label for="heatLossUnit" class="form-label">Unit</label>
-                  <select id="heatLossUnit" class="form-select" aria-label="" onchange="calculateCOP()">
-                    <option selected></option>
-                    <option value="kWh">kWh</option>
-                    <option value="BTUh">BTUh</option>
-                  </select>
+                  <label for="heatLossUnit" class="form-label">Heat Loss Unit</label>
+                  <div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="heatLossUnit" id="kWh" value="kWh" onchange="calculateCOP()">
+                      <label class="form-check-label" for="kWh">
+                        kWh
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="heatLossUnit" id="BTUh" value="BTUh" onchange="calculateCOP()">
+                      <label class="form-check-label" for="BTUh">
+                        BTUh
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">

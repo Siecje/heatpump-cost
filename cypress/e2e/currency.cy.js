@@ -37,18 +37,18 @@ describe('Currency Tests', () => {
     cy.get('[data-currency').should('have.text', ' ($)');
     
     // Fill out data to display savings amounts
-    cy.get('#existing').select("0");
+    cy.get('#natural_gas').check();
     cy.get('#price').type("12.04");
-    cy.get('#unit').select("GJ");
+    cy.get('#GJ').check();
 
     cy.get('#efficiency').type("80");
     cy.get('#electricity_price').type("0.12");
     cy.get('#heatPump').type("9");
-    cy.get('#heatPumpUnit').select("HSPF");
+    cy.get('#HSPF').check();
     cy.get('#heatLossTab').click();
     cy.get('#heatLossTabContent').should('be.visible');
     cy.get('#heatLoss').type("35000");
-    cy.get('#heatLossUnit').select("BTUh");
+    cy.get('#BTUh').check();
     cy.get('#city').type("Edmonton");
 
     // Ensure currency symbol is before amount
@@ -65,18 +65,18 @@ describe('Currency Tests', () => {
     cy.get('[data-currency').should('have.text', ' (€)');
 
     // Fill out data to display savings amounts
-    cy.get('#existing').select("0");
+    cy.get('#natural_gas').check();
     cy.get('#price').type("12.04");
-    cy.get('#unit').select("GJ");
+    cy.get('#GJ').check();
 
     cy.get('#efficiency').type("80");
     cy.get('#electricity_price').type("0.12");
     cy.get('#heatPump').type("9");
-    cy.get('#heatPumpUnit').select("HSPF");
+    cy.get('#HSPF').check();
     cy.get('#heatLossTab').click();
     cy.get('#heatLossTabContent').should('be.visible');
     cy.get('#heatLoss').type("35000");
-    cy.get('#heatLossUnit').select("BTUh");
+    cy.get('#BTUh').check();
     cy.get('#city').type("Edmonton");
 
     // Ensure currency symbol is after amount
@@ -88,18 +88,19 @@ describe('Currency Tests', () => {
   it('should set currency symbol after amount with cents', () => {
     cy.visit('/');
 
-    cy.get('#existing').select("3");
+    cy.get('#electric').check();
+
     cy.get('#electricity_price').type("12");
     cy.get('#currency2').type("¢");
     cy.get('[data-currency').should('have.text', ' (¢)');
 
     // Fill out data to display savings amounts
     cy.get('#heatPump').type("9");
-    cy.get('#heatPumpUnit').select("HSPF");
+    cy.get('#HSPF').check();
     cy.get('#heatLossTab').click();
     cy.get('#heatLossTabContent').should('be.visible');
     cy.get('#heatLoss').type("35000");
-    cy.get('#heatLossUnit').select("BTUh");
+    cy.get('#BTUh').check();
     cy.get('#city').type("Edmonton");
 
     // Ensure currency symbol is after amount
