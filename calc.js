@@ -237,6 +237,21 @@ function getNumberOfHeatingMonths(temperatureData){
 function calculateCOP(){
   // Update URL
   updateURL();
+
+  // Populate average temp table
+  const city = document.getElementById("city").value;
+  let numMonthsOfHeat;
+  if(city){
+    const temperatureData = getTemperatureData(city);
+    if (temperatureData){
+      numMonthsOfHeat = getNumberOfHeatingMonths(temperatureData);
+      document.getElementById("numHeatingMonths").innerText = numMonthsOfHeat;
+    }
+  }
+  else{
+    numMonthsOfHeat = null;
+  }
+
   // Cooling
   let seer2 = document.getElementById("seer2").value;
   let heatPumpSEER2 = document.getElementById("heatPumpSEER2").value;
@@ -376,17 +391,8 @@ function calculateCOP(){
     let monthlyDifference = hourlyDifference * 24 * 30;
     document.getElementById("monthlyDifference").innerText = monthlyDifference.toFixed(0);
 
-    let city = document.getElementById("city").value;
-    if(!city){
-      return;
-    }
-    let temperatureData = getTemperatureData(city);
-    if (temperatureData){
-      let numMonthsOfHeat = getNumberOfHeatingMonths(temperatureData);
-      document.getElementById("numHeatingMonths").innerText = numMonthsOfHeat;
-      if (numMonthsOfHeat > 0){
-        yearlyDifference = monthlyDifference * numMonthsOfHeat;
-      }
+    if (numMonthsOfHeat && numMonthsOfHeat > 0){
+      yearlyDifference = monthlyDifference * numMonthsOfHeat;
     }
   }
   

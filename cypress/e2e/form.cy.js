@@ -139,4 +139,61 @@ describe('The Home Page', () => {
     cy.get('#otherCost').type("1500");
     cy.get('#breakEvenParagraph').should('not.be.visible');
   });
+
+  it('should populate average temperature table when city is known', () => {
+    cy.visit('/');
+    cy.get('#heatLossTab').click();
+    
+    cy.get('#city').should('be.visible');
+    cy.get('#city').type("Edmonton");
+    const cellIds = [
+      '#m_0',
+      '#m_1',
+      '#m_2',
+      '#m_3',
+      '#m_4',
+      '#m_5',
+      '#m_6',
+      '#m_7',
+      '#m_8',
+      '#m_9',
+      '#m_10',
+      '#m_11'
+    ];
+
+    cellIds.forEach((cellId) => {
+      cy.get(cellId).invoke('text').then((text) => {
+        const num = parseFloat(text);
+        expect(isFinite(num) && !isNaN(num)).to.be.true;
+      });
+    });
+  });
+
+  it('should populate average temperature table when city is known from URL', () => {
+    cy.visit('/?city=Ottawa');
+    cy.get('#heatLossTab').click();
+    
+    cy.get('#city').should('be.visible');
+    const cellIds = [
+      '#m_0',
+      '#m_1',
+      '#m_2',
+      '#m_3',
+      '#m_4',
+      '#m_5',
+      '#m_6',
+      '#m_7',
+      '#m_8',
+      '#m_9',
+      '#m_10',
+      '#m_11'
+    ];
+
+    cellIds.forEach((cellId) => {
+      cy.get(cellId).invoke('text').then((text) => {
+        const num = parseFloat(text);
+        expect(isFinite(num) && !isNaN(num)).to.be.true;
+      });
+    });
+  });
 });
