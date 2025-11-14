@@ -178,9 +178,10 @@ function setExistingHeatingMethod() {
   updateURL();
   const existingRadio = document.querySelector('input[name="existing_heating_method"]:checked');
   let existingHeat;
-  if (existingRadio) {
-    existingHeat = existingRadio.value;
+  if (!existingRadio) {
+    return;
   }
+  existingHeat = existingRadio.value;
 
   const unitRadio = document.querySelector('input[name="unit"]:checked');
   let currentValue;

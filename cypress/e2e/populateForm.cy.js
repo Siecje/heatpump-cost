@@ -39,4 +39,13 @@ describe('Populate Form and URL tests', () => {
     cy.go('back');
     cy.location('pathname').should('eq', '/');
   });
+
+  it('should not remove billing units when query params exist without existing_heating_method', () => {
+    cy.visit('/?city=Ottawa');
+    cy.get('input[name="unit"]')
+      .filter(':visible')
+      .should('have.length', 6).each(($el) => {
+        cy.wrap($el).should('not.be.checked');
+      });
+  });
 });
