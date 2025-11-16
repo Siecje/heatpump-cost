@@ -1,3 +1,8 @@
 .hidden{
   display: none;
 }
+
+.hide-button {
+  padding: 0;
+  vertical-align: middle;
+}

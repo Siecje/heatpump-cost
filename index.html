@@ -238,11 +238,18 @@
                 </datalist>
               </div>
               <div class="row">
-                <table class="table table-sm">
+                <table class="table table-sm table-striped">
                   <thead>
                     <tr>
-                      <th scope="col"></th>
-                      <th scope="col">Average Temperature (&deg;C)</th>
+                      <th scope="col">Month</th>
+                      <th scope="col">
+                        <span>Average Temperature (&deg;C)</span>
+                        <button id="hide_C" type="button" class="btn-close hide-button" aria-label="Close" onclick="hideColumn(this, 'm_')"></button>
+                      </th>
+                      <th scope="col">
+                        Average Temperature (&deg;F)
+                        <button id="hide_F" type="button" class="btn-close hide-button" aria-label="Close" onclick="hideColumn(this, 'mf_')"></button>
+                      </th>
                       <th scope="col">Heating?</th>
                     </tr>
                   </thead>
@@ -250,61 +257,73 @@
                     <tr>
                       <td>January</td>
                       <td id="m_0"></td>
+                      <td id="mf_0"></td>
                       <td id="mh_0"></td>
                     </tr>
                     <tr>
                       <td>February</td>
                       <td id="m_1"></td>
+                      <td id="mf_1"></td>
                       <td id="mh_1"></td>
                     </tr>
                     <tr>
                       <td>March</td>
                       <td id="m_2"></td>
+                      <td id="mf_2"></td>
                       <td id="mh_2"></td>
                     </tr>
                     <tr>
                       <td>April</td>
                       <td id="m_3"></td>
+                      <td id="mf_3"></td>
                       <td id="mh_3"></td>
                     </tr>
                     <tr>
                       <td>May</td>
                       <td id="m_4"></td>
+                      <td id="mf_4"></td>
                       <td id="mh_4"></td>
                     </tr>
                     <tr>
                       <td>June</td>
                       <td id="m_5"></td>
+                      <td id="mf_5"></td>
                       <td id="mh_5"></td>
                     </tr>
                     <tr>
                       <td>July</td>
                       <td id="m_6"></td>
+                      <td id="mf_6"></td>
                       <td id="mh_6"></td>
                     </tr>
                     <tr>
                       <td>August</td>
                       <td id="m_7"></td>
+                      <td id="mf_7"></td>
                       <td id="mh_7"></td>
                     </tr>
                     <tr>
                       <td>September</td>
                       <td id="m_8"></td>
+                      <td id="mf_8"></td>
                       <td id="mh_8"></td>
                     </tr>
                     <tr>
                       <td>October</td>
                       <td id="m_9"></td>
+                      <td id="mf_9"></td>
                       <td id="mh_9"></td>
                     </tr>
                     <tr>
                       <td>November</td>
                       <td id="m_10"></td>
+                      <td id="mf_10"></td>
                       <td id="mh_10"></td>
                     </tr>
                     <tr>
                       <td>December</td>
                       <td id="m_11"></td>
+                      <td id="mf_11"></td>
                       <td id="mh_11"></td>
                     </tr>
                   </tbody>

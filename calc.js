@@ -235,6 +235,10 @@ function getTemperatureData(city){
   }
 }
 
+function convertCelsiusToFahrenheit(celsius) {
+    const fahrenheit = (celsius * 9/5) + 32;
+    return fahrenheit.toFixed(1);
+}
 
 function getNumberOfHeatingMonths(temperatureData){
   let count = 0;
@@ -249,6 +253,7 @@ function getNumberOfHeatingMonths(temperatureData){
   for(let i=startIndex;i<endIndex;i++){
     // Populate table
     document.getElementById("m_" + (i - startIndex)).innerText = temperatureData[i];
+    document.getElementById("mf_" + (i - startIndex)).innerText = convertCelsiusToFahrenheit(temperatureData[i]);
     if (temperatureData[i] <= partialHeatingTemp){
       count += 1;
       document.getElementById("mh_" + (i - startIndex)).innerText = "*";
@@ -259,6 +264,20 @@ function getNumberOfHeatingMonths(temperatureData){
     }
   }
   return count;
+}
+
+function hideColumn(element, idPrefix){
+    // Get the table element that contains the element
+    const table = element.closest('table');
+    const cells = table.querySelectorAll('td');
+
+    cells.forEach(cell => {
+        if (cell.id.startsWith(idPrefix)) {
+            cell.style.display = 'none';
+        }
+    });
+    const th = element.closest('th');
+    th.style.display = 'none';
 }
 
 function calculateCOP(){
