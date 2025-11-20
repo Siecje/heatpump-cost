@@ -45,11 +45,11 @@ describe('The Home Page', () => {
     // Same values as above except montly_cost is provided
     cy.visit('/');
     cy.get('#natural_gas').check();
-    cy.get('#price').type("1.27");
+    cy.get('#price').type("$1.27");
     cy.get('#therm').check();
     cy.get('#monthly_cost').type('20');
     cy.get('#efficiency').type("80");
-    cy.get('#electricity_price').type("0.15");
+    cy.get('#electricity_price').type("$0.15");
     cy.get('#heatPump').type("9");
     cy.get('#HSPF').check();
     cy.get('#cop').should('have.text', '2.77');

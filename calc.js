@@ -281,6 +281,16 @@ function hideColumn(element, idPrefix){
     th.style.display = 'none';
 }
 
+function parseCost(value) {
+  // Remove everything except digits and dots, collapse multiple dots, keep first dot
+  const cleaned = value
+    .replace(/[^\d.]+/g, "")         // remove non-digits/non-dots
+    .replace(/\.{2,}/g, ".")         // collapse consecutive dots
+    .replace(/^\./, "")              // remove leading dot
+    .replace(/(\.\d*?)\..*/g, "$1"); // keep only the first dot
+  return Number(cleaned || 0);
+}
+
 function calculateCOP(){
   // Update URL
   updateURL();
@@ -334,14 +344,15 @@ function calculateCOP(){
     document.getElementById("acCostMultiplier").innerText = acText;
   }
 
-  let price = Number(document.getElementById("price").value.replaceAll("$", ""));
+  let price = parseCost(document.getElementById("price").value);
+
   let unit;
   const unitRadio = document.querySelector('input[name="unit"]:checked');
   if (unitRadio) {
     unit = unitRadio.value;
   }
   let efficiency = Number(document.getElementById("efficiency").value);
-  let electricity_price = Number(document.getElementById("electricity_price").value.replaceAll("$", ""));
+  const electricity_price = parseCost(document.getElementById("electricity_price").value);
 
   let efficiencyAsDecimal;
   let equivalentCOP;
