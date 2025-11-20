@@ -48,4 +48,13 @@ describe('Populate Form and URL tests', () => {
         cy.wrap($el).should('not.be.checked');
       });
   });
+
+  it('should populate monthly_cost', () => {
+    cy.visit('/');
+    cy.get('#monthly_cost').type('20');
+    cy.location('search').should('eq', '?monthly_cost=20');
+    
+    cy.visit('/?existing_heating_method=natural_gas&heatLossUnit=kWh&heatPumpSEER2Unit=SEER2&heatPumpUnit=HSPF&unit=GJ&price=12&currency=%24&efficiency=80&electricity_price=0.14&seer2=14&heatPumpSEER2=17&heatPump=9&heatLoss=10&city=Ottawa&monthly_cost=20');
+    cy.get('#monthly_cost').should('exist').and('be.visible').should('have.value', '20');
+  });
 });

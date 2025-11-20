@@ -41,6 +41,33 @@ describe('The Home Page', () => {
     cy.get('#breakEvenParagraph').should('not.be.visible');
   });
 
+  it('should calculate COP and breakEvenYear for Natural Gas using monthly_cost', () => {
+    // Same values as above except montly_cost is provided
+    cy.visit('/');
+    cy.get('#natural_gas').check();
+    cy.get('#price').type("1.27");
+    cy.get('#therm').check();
+    cy.get('#monthly_cost').type('20');
+    cy.get('#efficiency').type("80");
+    cy.get('#electricity_price').type("0.15");
+    cy.get('#heatPump').type("9");
+    cy.get('#HSPF').check();
+    cy.get('#cop').should('have.text', '2.77');
+    cy.get('#heatLossTab').click();
+    cy.get('#heatLossTabContent').should('be.visible');
+    cy.get('#heatLoss').type("24000");
+    cy.get('#BTUh').check();
+    cy.get('#city').type("Edmonton");
+    cy.get('#heatPumpCost').type("20000");
+    cy.get('#otherCost').type("1500");
+    cy.get('#hourlyDifference').should('have.text', '0.01');
+    cy.get('#monthlyDifference').should('have.text', '7');
+    cy.get('#yearlyDifference').should('have.text', '52');
+    cy.get('#breakEvenParagraph')
+      .should('be.visible')
+      .should('contain', '355.76');
+  });
+
   it('should calculate COP and breakEvenYear for Oil', () => {
     cy.visit('/');
     cy.get('#oil').check();
@@ -214,5 +241,4 @@ describe('The Home Page', () => {
         cy.wrap($el).should('not.be.checked');
       });
   });
-
 });

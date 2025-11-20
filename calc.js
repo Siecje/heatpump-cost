@@ -18,6 +18,7 @@ const formInputIds = [
   'heatLoss',
   'city',
   'heatPumpCost',
+  'monthly_cost',
   'otherCost'
 ];
 
@@ -453,8 +454,18 @@ function calculateCOP(){
     }
     let otherCostPerHour = energyPerHour * costPerkWhHeat;
     let hpCostPerHour = (energyPerHour / hpCOP) * electricity_price;
+
+    const monthlyCost = Number(document.getElementById('monthly_cost').value) || 0;
     let hourlyDifference;
-    hourlyDifference = otherCostPerHour - hpCostPerHour;
+    if (monthlyCost) {
+      const hoursPerMonth = 24 * 30;
+      const monthlyCostPerHour = monthlyCost / hoursPerMonth;
+      hourlyDifference = monthlyCostPerHour + otherCostPerHour - hpCostPerHour;
+    }
+    else {
+      hourlyDifference = otherCostPerHour - hpCostPerHour;
+    }
+
     document.getElementById("hourlyDifference").innerText = hourlyDifference.toFixed(2);
     let monthlyDifference = hourlyDifference * 24 * 30;
     document.getElementById("monthlyDifference").innerText = monthlyDifference.toFixed(0);
