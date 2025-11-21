@@ -109,6 +109,8 @@ describe('The Home Page', () => {
 
   it('should not have a break even if the heat pump costs more', () => {
     cy.visit('/');
+    cy.get('#seasonalSavingsText').should('not.be.visible');
+    cy.get('#seasonalSavingsTextMore').should('not.be.visible');
     cy.get('#natural_gas').check();
     cy.get('#price').type("1.27");
     cy.get('#therm').check();
@@ -119,9 +121,47 @@ describe('The Home Page', () => {
     cy.get('#fuelUsed').type("3000");
     cy.get('#heatPumpCost').type("20000");
     cy.get('#otherCost').type("0");
+    cy.get('#currency').type('$');
+    cy.get('#seasonalSavings')
+      .should('be.visible')
+      .invoke('text')
+      .then(t => t.replace(/\s+/g, ' ').trim())
+      .should('include', 'Every heating season with that heat pump will cost $187.49 MORE.')
+    cy.get('#seasonalSavingsTextMore').should('be.visible');
+    cy.get('#seasonalSavingsAmount').should('be.visible');
     cy.get('#breakEvenParagraph').should('not.be.visible');
+    cy.get('#currency').clear().type('€');
+    cy.get('#seasonalSavings')
+      .should('be.visible')
+      .invoke('text')
+      .then(t => t.replace(/\s+/g, ' ').trim())
+      .should('include', 'Every heating season with that heat pump will cost 187.49€ MORE.')
+    cy.get('#seasonalSavingsTextMore').should('be.visible');
+    cy.get('#seasonalSavingsAmount').should('be.visible');
   });
 
+  it('should remove MORE from seasonalSavings', () => {
+    cy.visit('/');
+    cy.get('#seasonalSavingsText').should('not.be.visible');
+    cy.get('#seasonalSavingsTextMore').should('not.be.visible');
+    cy.get('#natural_gas').check();
+    cy.get('#price').type("1.27");
+    cy.get('#therm').check();
+    cy.get('#efficiency').type("80");
+    cy.get('#electricity_price').type("0.15");
+    cy.get('#heatPump').type("9");
+    cy.get('#HSPF').check();
+    cy.get('#fuelUsed').type("3000");
+    cy.get('#heatPumpCost').type("20000");
+    cy.get('#otherCost').type("0");
+    cy.get('#currency').type('$');
+    cy.get('#seasonalSavings').should('be.visible');
+    cy.get('#seasonalSavingsTextMore').should('be.visible');
+    cy.get('#price').clear().type("1.5");
+    cy.get('#seasonalSavingsTextMore').should('not.be.visible');
+    cy.get('#seasonalSavings').should('be.visible');
+  });
+  
   it('should show cooling savings SEER', () => {
     cy.visit('/');
     cy.get('#seer2').type("14");

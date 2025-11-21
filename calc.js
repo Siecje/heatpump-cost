@@ -119,20 +119,25 @@ function setCurrency(element){
   }
 
   // element ids which need a currency symbol either before or after
-  const siblingIds = ['hourlyDifference', 'monthlyDifference', 'yearlyDifference'];
+  const moneyIds = [
+    'hourlyDifference',
+    'monthlyDifference',
+    'seasonalSavingsAmount',
+    'yearlyDifference',
+  ];
 
-  const afterSymbols = ['¢', '₹', 'R$', '€', '£'];
+  const afterSymbols = ['¢', '₹', '€'];
   const after = afterSymbols.includes(currencySymbol);
-  for (const siblingId of siblingIds){
-    const sibling = document.getElementById(siblingId);
+  for (const moneyId of moneyIds){
+    const moneyElement = document.getElementById(moneyId);
     const newElement = document.createElement('span');
     newElement.setAttribute('data-currency-symbol', "");
     newElement.textContent = currencySymbol;
     if (after){
-      sibling.insertAdjacentElement('afterend', newElement);
+      moneyElement.insertAdjacentElement('afterend', newElement);
     }
     else {
-      sibling.parentNode.insertBefore(newElement, sibling);
+      moneyElement.parentNode.insertBefore(newElement, moneyElement);
     }
   }
   updateURL();
@@ -435,19 +440,26 @@ function calculateCOP(){
     let heatNeeded_kWh = fuelused * kWhPerUnit[unit] * efficiencyAsDecimal;
     // reduce heatNeeded_kWh by COP then multiple by price
     costHeatingSeasonHP = (heatNeeded_kWh / hpCOP) * electricity_price;
-    let seasonalSavingsText = 'Every heating season with that heat pump will ';
+    let seasonalSavingsText = '';
     if (costHeatingSeasonExisting > costHeatingSeasonHP) {
+      document.getElementById('seasonalSavingsTextMore').style.display = 'none';
       yearlyDifference = costHeatingSeasonExisting - costHeatingSeasonHP;
-      seasonalSavingsText += 'save $' + yearlyDifference.toFixed(2);
+      seasonalSavingsText = 'save';
+      document.getElementById('seasonalSavingsAmount').innerText = yearlyDifference.toFixed(2);
     }
-    else if (costHeatingSeasonExisting < costHeatingSeasonHP){
+    else if (costHeatingSeasonExisting < costHeatingSeasonHP) {
       yearlyDifference = costHeatingSeasonHP - costHeatingSeasonExisting;
-      seasonalSavingsText += 'cost $' + yearlyDifference.toFixed(2) + ' more.';
+      seasonalSavingsText = 'cost';
+      document.getElementById('seasonalSavingsAmount').innerText = yearlyDifference.toFixed(2);
+      document.getElementById('seasonalSavingsTextMore').style.display = 'inline-block';
     }
     else {
-      seasonalSavingsText += 'cost the same.';
+      document.getElementById('seasonalSavingsTextMore').style.display = 'none';
+      seasonalSavingsText = 'cost the same.';
+      document.getElementById('seasonalSavingsAmount').style.display = 'none';
     }
-    document.getElementById("seasonalSavings").innerText = seasonalSavingsText;
+    document.getElementById('seasonalSavingsText').innerText = seasonalSavingsText;
+    document.getElementById('seasonalSavings').style.display = 'block';
   }
   else {
     let energyPerHour = document.getElementById("heatLoss").value;
