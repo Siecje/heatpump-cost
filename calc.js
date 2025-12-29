@@ -199,7 +199,7 @@ function setExistingHeatingMethod() {
   hideAllUnitRadios();
   let validOptions = [];
   if (existingHeat === 'natural_gas') {
-    validOptions = ["ft3", "m3", "GJ", "therm"];
+    validOptions = ["ft3", "kWh", "m3", "GJ", "therm"];
     displayRadiosByValue('unit', validOptions);
 
     let existingPrice = document.getElementById("existingPrice");

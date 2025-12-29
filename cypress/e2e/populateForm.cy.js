@@ -44,7 +44,7 @@ describe('Populate Form and URL tests', () => {
     cy.visit('/?city=Ottawa');
     cy.get('input[name="unit"]')
       .filter(':visible')
-      .should('have.length', 6).each(($el) => {
+      .should('have.length', 7).each(($el) => {
         cy.wrap($el).should('not.be.checked');
       });
   });

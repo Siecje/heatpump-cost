@@ -265,7 +265,7 @@ describe('The Home Page', () => {
     cy.get('#natural_gas').check();
     cy.get('input[name="unit"]')
       .filter(':visible')
-      .should('have.length', 4).each(($el) => {
+      .should('have.length', 5).each(($el) => {
         cy.wrap($el).should('not.be.checked');
       });
     cy.get('#therm').check();
@@ -280,5 +280,14 @@ describe('The Home Page', () => {
       .should('have.length', 3).each(($el) => {
         cy.wrap($el).should('not.be.checked');
       });
+  });
+
+  it('should show kWh for natural gas', () => {
+    cy.visit('/');
+    cy.get('#natural_gas').check();
+
+    cy.get('#kWh_unit').should('be.visible');
+
+    cy.get('input[name="unit"]').filter(':visible').should('have.length', 5);
   });
 });
